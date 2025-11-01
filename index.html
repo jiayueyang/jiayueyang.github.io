@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>杨佳悦 | Jiayue Yang's Personal Homepage</title>
+  <style>
+    :root{
+      --accent-a:#667eea; --accent-b:#764ba2;
+      --glass: rgba(255,255,255,0.95);
+      --shadow: 0 10px 40px rgba(0,0,0,.1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; padding:0; line-height:1.6; color:#333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height:100vh;
+      background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%);
+    }
+    .container{width:85%; max-width:1200px; margin:0 auto; overflow:hidden}
+
+    /* ===== Header ===== */
+    header{
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      background: var(--glass); backdrop-filter: blur(10px);
+      transition: background .3s ease, box-shadow .3s ease;
+      box-shadow:0 2px 20px rgba(0,0,0,0.08);
+    }
+    header .wrap{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    #branding h1{
+      margin:0; font-size:1.6rem; font-weight:700;
+      background: linear-gradient(45deg, var(--accent-a), var(--accent-b));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    nav ul{margin:0; padding:0; list-style:none; display:flex; gap:14px; align-items:center}
+    nav a{color:#333; text-decoration:none; font-weight:500; padding:6px 10px; border-radius:10px; transition:.2s}
+    nav a:hover{color:var(--accent-a); background:rgba(102,126,234,.08)}
+    .language-toggle{display:flex; gap:8px; margin-left:10px}
+    .language-toggle button{
+      background:none; border:2px solid var(--accent-a); color:var(--accent-a);
+      padding:6px 12px; border-radius:999px; cursor:pointer; font-weight:600; transition:.2s;
+    }
+    .language-toggle button:hover, .language-toggle button.highlight{
+      background:var(--accent-a); color:#fff; box-shadow:0 5px 15px rgba(102,126,234,.28)
+    }
+
+    /* ===== Hero / Cosmos ===== */
+    #home{
+      position:relative; min-height:72vh; padding-top:120px;
+      display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; overflow:hidden;
+      scroll-margin-top:120px;
+    }
+    #home::before{content:''; position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:0}
+
+    /* Double canvas (nebula removed) */
+    #star-canvas, #bh-canvas{
+      position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none;
+    }
+    #star-canvas{z-index:1}
+    #bh-canvas{z-index:3}
+
+    #home .content{position:relative; z-index:4; animation:fadeInUp .9s ease-out both}
+    #home h1{
+      font-size:3.4rem; margin:0 0 14px; text-shadow:2px 2px 4px rgba(0,0,0,.5);
+      animation:glow 2s ease-in-out infinite alternate
+    }
+    #home p{font-size:1.15rem; margin:0 0 22px; text-shadow:1px 1px 2px rgba(0,0,0,.45)}
+    #home img{
+      position:absolute; top:20px; right:20px; width:170px; max-width:40vw; aspect-ratio:1/1; object-fit:cover;
+      border-radius:50%; border:5px solid rgba(255,255,255,.3);
+      animation:float 3s ease-in-out infinite; z-index:4; filter:saturate(1.05)
+    }
+    #home img:hover{transform: scale(1.06); border-color: rgba(255,255,255,.85); transition:.25s}
+
+    @keyframes fadeInUp{from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none}}
+    @keyframes glow{
+      from{ text-shadow:2px 2px 4px rgba(0,0,0,.5), 0 0 16px rgba(255,255,255,.25)}
+      to  { text-shadow:2px 2px 4px rgba(0,0,0,.5), 0 0 30px rgba(255,255,255,.55)}
+    }
+    @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    /* ===== Sections / Cards ===== */
+    section{
+      padding:40px 20px; margin:30px 0; background: var(--glass);
+      backdrop-filter: blur(10px); border-radius:20px; box-shadow: var(--shadow);
+      scroll-margin-top:120px; position:relative; overflow:hidden; transition:.3s;
+    }
+    section::before{
+      content:''; position:absolute; top:0; left:-100%; width:100%; height:3px;
+      background:linear-gradient(90deg, transparent, var(--accent-a), transparent); transition:left .5s;
+    }
+    section:hover::before{left:100%}
+    section:hover{transform: translateY(-5px); box-shadow:0 20px 60px rgba(0,0,0,.14)}
+    h2{font-size:2.1rem; margin:0 0 18px; display:inline-block; border-bottom:3px solid var(--accent-a); padding-bottom:12px}
+    h3{font-size:1.25rem; color:var(--accent-a); margin:22px 0 12px}
+    h4{font-size:1.1rem; color:#555; margin:14px 0 8px}
+
+    .publication, .award, .research-item, .contact-card, .stat-card{border-radius:16px; transition:.25s}
+    .publication{background: linear-gradient(135deg, #f5f7fa, #c3cfe2); padding:16px; margin:12px 0; border-left:5px solid var(--accent-a)}
+    .publication:hover{transform: translateX(8px); box-shadow:0 6px 20px rgba(102,126,234,.22)}
+    .award{background: linear-gradient(135deg, #ffeaa7, #fab1a0); padding:14px; margin:10px 0; border-left:4px solid #e17055}
+    .award:hover{transform:scale(1.015)}
+    .research-item{background: linear-gradient(135deg, #a8e6cf, #88d8a3); padding:18px; margin:16px 0; border-left:5px solid #00b894}
+    .research-item:hover{transform: translateY(-3px); box-shadow:0 10px 26px rgba(0,184,148,.22)}
+
+    .stats-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:18px; margin:22px 0}
+    .stat-card{background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color:#fff; padding:24px; text-align:center}
+    .stat-card:hover{transform: translateY(-4px) scale(1.03); box-shadow:0 14px 28px rgba(102,126,234,.28)}
+    .stat-number{font-size:2.2rem; font-weight:800; margin-bottom:6px}
+
+    .contact-info{display:flex; flex-wrap:wrap; gap:16px; justify-content:space-around; margin:18px 0}
+    .contact-card{background: linear-gradient(135deg, #84fab0, #8fd3f4); padding:18px; min-width:220px; text-align:center; flex:1}
+    .contact-card:hover{transform: translateY(-5px); box-shadow:0 10px 25px rgba(132,250,176,.28)}
+
+    .button{display:inline-block; color:#fff; background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); padding:10px 22px; text-decoration:none; border-radius:999px; font-weight:600; margin:10px 6px; transition:.2s}
+    .button:hover{transform: translateY(-2px); box-shadow:0 10px 20px rgba(102,126,234,.28)}
+
+    ul{padding-left:22px} li{margin:7px 0; transition:.15s} li:hover{color:var(--accent-a); transform:translateX(4px)}
+    .hidden{display:none}
+
+    footer{padding:36px 20px; margin-top:48px; color:#fff; background: linear-gradient(135deg, #2c3e50, #34495e); text-align:center; border-radius:20px 20px 0 0}
+
+    @media (max-width:768px){
+      .container{width:94%}
+      nav ul{flex-wrap:wrap; gap:10px}
+      #home h1{font-size:2.4rem}
+      #home img{position:static; margin:18px auto 0; display:block; width:160px}
+      .stats-grid{grid-template-columns:1fr}
+    }
+    @media (prefers-reduced-motion: reduce){
+      #home .content, #home h1{animation:none!important}
+      /* nebula styles removed */
+    }
+#home::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.12); /* 更透亮的背景 */
+  z-index:0;
+}
+
+/* ===================== VISITS WIDGET: BEGIN (CSS) ===================== */
+#visits-widget.visits-badge{
+  position:absolute; right:18px; bottom:18px; z-index:5;
+  user-select:none; -webkit-user-select:none;
+}
+#visits-widget .visits-inner{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px;
+  background: var(--glass, rgba(255,255,255,.95));
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  border: 2px solid rgba(255,255,255,.65);
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+#visits-widget .visits-inner:hover{
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0,0,0,.16);
+}
+#visits-widget .star-face{
+  position:relative; width:38px; height:38px; border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, #fff8cc, #ffd36a 60%, #ffbe55 100%);
+  box-shadow: 0 6px 14px rgba(255,190,85,.45), inset 0 2px 6px rgba(255,255,255,.8);
+  flex: 0 0 38px;
+  transform: translateZ(0);
+}
+#visits-widget .star-face .eye{
+  position:absolute; top:46%;
+  width:6px; height:6px; background:#4a4a4a; border-radius:50%;
+  transform: translateY(-50%);
+  animation: blink 4.5s ease-in-out infinite;
+}
+#visits-widget .star-face .eye.left{ left:11px; }
+#visits-widget .star-face .eye.right{ right:11px; }
+#visits-widget .star-face .sparkle{
+  position:absolute; left:6px; top:6px; width:10px; height:10px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);
+  animation: twinkle 2.4s ease-in-out infinite alternate;
+}
+@keyframes blink{ 0%,4%,100%{transform:translateY(-50%) scaleY(1)} 2%{transform:translateY(-50%) scaleY(0.2)} }
+@keyframes twinkle{ from{transform:scale(0.85)} to{transform:scale(1.15)} }
+#visits-widget .visits-text{line-height:1.05; min-width:92px}
+#visits-widget .label{
+  font-size:.78rem; font-weight:700;
+  background: linear-gradient(45deg, var(--accent-a,#667eea), var(--accent-b,#764ba2));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:2px;
+}
+#visits-widget .count{
+  font-weight:800; font-size:1.4rem; color:#333; letter-spacing:.5px;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+#visits-widget .sub{
+  font-size:.7rem; color:#666; margin-top:4px;
+}
+#visits-widget .subcount{
+  font-weight:700; color:#333; font-size:.95rem;
+}
+@media (max-width:768px){
+  #visits-widget.visits-badge{ right:12px; bottom:12px; }
+  #visits-widget .visits-inner{ padding:8px 12px; gap:8px }
+  #visits-widget .count{ font-size:1.25rem }
+}
+@media (prefers-reduced-motion: reduce){
+  #visits-widget .star-face .eye, #visits-widget .star-face .sparkle { animation:none !important; }
+  #visits-widget .visits-inner{ transition:none !important; }
+}
+/* ===================== VISITS WIDGET: END (CSS) ===================== */
+  </style>
+
+  <script>
+    /* ---------- Language Toggle ---------- */
+    function toggleLanguage(lang){
+      const zh = document.querySelectorAll('.zh');
+      const en = document.querySelectorAll('.en');
+      const zhBtn = document.getElementById('zh-btn'), enBtn = document.getElementById('en-btn');
+      if(lang==='zh'){
+        zh.forEach(x=>x.classList.remove('hidden'));
+        en.forEach(x=>x.classList.add('hidden'));
+        zhBtn.classList.add('highlight'); enBtn.classList.remove('highlight');
+      }else{
+        zh.forEach(x=>x.classList.add('hidden'));
+        en.forEach(x=>x.classList.remove('hidden'));
+        zhBtn.classList.remove('highlight'); enBtn.classList.add('highlight');
+      }
+    }
+
+    /* ==================== Cosmos FX (nebula removed) ==================== */
+    function cosmosFX(){
+      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = matchMedia('(pointer:coarse)').matches || Math.min(screen.width, window.innerWidth) < 600;
+
+      // 不卡策略：限制 DPR（桌面≤1.25；移动≤1.0）——保持你原始的更保守设置
+      const DPR = Math.min(window.devicePixelRatio || 1, isMobile ? 0.9 : 0.7);
+
+      const starCanvas = document.getElementById('star-canvas');
+      const bhCanvas = document.getElementById('bh-canvas');
+      if(!starCanvas || !bhCanvas) return;
+
+      const sctx = starCanvas.getContext('2d');
+      const bctx = bhCanvas.getContext('2d');
+
+      let stars=[], meteors=[], particles=[];
+      let lastRAF = performance.now(), lastScrollY = window.scrollY;
+      let scrollSpeedInst = 0, scrollSpeedEMA = 0; // EMA 平滑
+      let paused = false, storm = false, tick=0;
+
+      // ---- Black hole state ----
+      const BH = { active:false, x:0, y:0, r:90, born:0, life:12000, cool:8000, lastGone: -1e9, eht:true, rippleT:0, hsAng:0, prevRect:null };
+      const CLICK = { chanceBH:0.30, nearFactor:1.5 };
+
+      // 全局闪烁稳态：降速、距离衰减、缓启动
+      let twinkleGlobal = 0; // 缓启动 [0,1]
+      const T_TWINKLE_EASE = 3500; // ms
+
+      // 每帧上限（不卡策略）
+      const MAX_PARTICLES = isMobile ? 200 : 300;
+      const MAX_METEORS   = isMobile ? 3  : 6;
+
+      const cfg = {
+        star: { density: 0.00005, min: 30, max: 60, twinkle: 0.004 },
+        meteor: { baseRate: 0.18, speedMin: 6, speedVar: 6, lenMin: 100, lenVar: 150, angle: Math.PI/4 },
+        trail: { life: 620 },
+        burst: { count: 55, speed: [2.2, 7.5], life: [600, 1400] }
+      };
+
+      function fit(canvas, ctx){
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        canvas.width = Math.floor(w * DPR); canvas.height = Math.floor(h * DPR);
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      function resizeAll(){
+        fit(starCanvas, sctx);
+        fit(bhCanvas, bctx);
+        resetStars();
+      }
+
+      /* ===== Stars ===== */
+      function resetStars(){
+        stars.length = 0;
+        const area = starCanvas.clientWidth * starCanvas.clientHeight;
+        const baseCount = Math.floor(area * cfg.star.density);
+        const count = Math.max(cfg.star.min, Math.min(cfg.star.max, baseCount));
+        const cx = starCanvas.clientWidth/2, cy = starCanvas.clientHeight/2;
+        for(let i=0;i<count;i++){
+          const z = 0.6 + Math.random()*1.8;
+          const tier = Math.random();
+          let r = (tier<0.8 ? (Math.random()*0.9 + 0.2) : (tier<0.95 ? (Math.random()*1.4 + 0.6) : (Math.random()*1.8 + 1.0))) / z;
+
+          const x = Math.random()*starCanvas.clientWidth;
+          const y = Math.random()*starCanvas.clientHeight;
+          const dx = x - cx, dy = y - cy;
+          const radial = Math.hypot(dx,dy) / Math.max(cx,cy);
+          const distAtten = 0.5 + 0.5*Math.max(0,1 - radial);
+
+          stars.push({
+            x, y, r,
+            alpha: Math.random()*0.8+0.2,
+            tw: (Math.random()*0.010 + cfg.star.twinkle)*(Math.random()<.5?-1:1),
+            hue: 200 + Math.random()*80,
+            hueShift: (Math.random()*0.22 + 0.06)*(Math.random()<.5?-1:1),
+            tier, z, distAtten
+          });
+        }
+      }
+      function drawStarGlow(x,y,r,hue,alpha){
+        const g = sctx.createRadialGradient(x,y,0, x,y, r*3.2);
+        g.addColorStop(0, `hsla(${hue}, 90%, 85%, ${0.85*alpha})`);
+        g.addColorStop(1, `hsla(${hue}, 90%, 20%, 0)`);
+        sctx.fillStyle=g;
+        sctx.beginPath(); sctx.arc(x, y, r*2.2, 0, Math.PI*2); sctx.fill();
+      }
+      function drawStarSpikes(ctx, x, y, size, hue, alpha, rot=0){
+        ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = `hsla(${hue}, 100%, 90%, ${alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(-size,0); ctx.lineTo(size,0); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,-size); ctx.lineTo(0,size); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-size*0.7,-size*0.7); ctx.lineTo(size*0.7,size*0.7); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(size*0.7,-size*0.7); ctx.lineTo(-size*0.7,size*0.7); ctx.stroke();
+        ctx.restore();
+      }
+      function drawStars(){
+        const w = starCanvas.clientWidth, h = starCanvas.clientHeight;
+        const twinkleBoost = 1;
+        const reduce = (BH.active?0.2:1.0);
+
+        for(const s of stars){
+          if(Math.random()>reduce) continue;
+
+          // 轻量透镜（近区偏折）
+          if(BH.active){
+            const dx = (s.x - BH.x), dy = (s.y - BH.y);
+            const d2 = dx*dx + dy*dy;
+            const rad2 = (BH.r*BH.r)*2.5;
+            if(d2 < rad2*8){
+              const f = 0.00018 * (rad2 / Math.max(d2, 100));
+              s.x += dx * f; s.y += dy * f;
+            }
+          }
+
+          // 全局降速 + 深度与距离衰减 + 缓启动
+          const baseTw = s.tw * twinkleBoost * (0.65) * (1/s.z) * s.distAtten * twinkleGlobal;
+          s.alpha += baseTw;
+          if(s.alpha>1){s.tw*=-1; s.alpha=1}
+          if(s.alpha<0){s.tw*=-1; s.alpha=0; s.x=Math.random()*w; s.y=Math.random()*h}
+          s.hue += s.hueShift;
+          if(s.hue<180 || s.hue>265) s.hueShift*=-1;
+
+          if(s.tier>0.95){
+            drawStarGlow(s.x, s.y, s.r*1.6, s.hue, s.alpha);
+            drawStarSpikes(sctx, s.x, s.y, s.r*2.4, s.hue, 0.55*s.alpha, (tick%360)/180*Math.PI);
+          }else if(s.tier>0.8){
+            drawStarGlow(s.x, s.y, s.r*1.2, s.hue, 0.8*s.alpha);
+          }
+
+          sctx.fillStyle = `hsla(${s.hue}, 80%, ${72 + Math.sin(s.hue*0.05)*10}%, ${0.9*s.alpha})`;
+          sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, Math.PI*2); sctx.fill();
+        }
+      }
+
+      /* ===== Meteors ===== */
+      function spawnMeteor(xStart){
+        if(meteors.length>=MAX_METEORS) return;
+        const w = starCanvas.clientWidth;
+        const x = (typeof xStart==='number') ? xStart : (Math.random()*w*0.85);
+        meteors.push({
+          x, y:-50,
+          len: cfg.meteor.lenMin + Math.random()*cfg.meteor.lenVar,
+          speed: cfg.meteor.speedMin + Math.random()*cfg.meteor.speedVar,
+          angle: cfg.meteor.angle,
+          opacity: 0.96,
+          hue: 195 + Math.random()*80
+        });
+      }
+      function drawMeteors(){
+        for(let i=meteors.length-1;i>=0;i--){
+          const m = meteors[i];
+          if(BH.active){
+            const dx = BH.x - m.x, dy = BH.y - m.y;
+            const dist = Math.hypot(dx,dy);
+            const pull = dist>60 ? 0.02*(BH.r/Math.max(dist,80)) : 0;
+            m.angle += pull * 0.03;
+          }
+          sctx.lineCap='round'; sctx.lineWidth=2;
+          const grad = sctx.createLinearGradient(
+            m.x, m.y,
+            m.x - m.len*Math.cos(m.angle),
+            m.y - m.len*Math.sin(m.angle)
+          );
+          grad.addColorStop(0, `hsla(${m.hue},100%,90%,${m.opacity})`);
+          grad.addColorStop(1, `hsla(${m.hue},100%,60%,0)`);
+          sctx.strokeStyle = grad;
+          sctx.beginPath();
+          sctx.moveTo(m.x, m.y);
+          sctx.lineTo(m.x - m.len*Math.cos(m.angle), m.y - m.len*Math.sin(m.angle));
+          sctx.stroke();
+
+          const tailCount = BH.active ? 2 : 3;
+          for(let p=0;p<tailCount;p++){
+            if(particles.length>=MAX_PARTICLES) break;
+            particles.push(makeSparkleParticle(
+              m.x - Math.random()*6,
+              m.y - Math.random()*6,
+              -Math.cos(m.angle)*(m.speed*0.45) + (Math.random()-0.5)*1.5,
+              -Math.sin(m.angle)*(m.speed*0.45) + (Math.random()-0.5)*1.5,
+              1 + Math.random()*1.6,
+              cfg.trail.life*(0.8+Math.random()*0.4),
+              m.hue,
+              0.68
+            ));
+          }
+
+          m.x += m.speed; m.y += m.speed; m.opacity -= 0.0105;
+          if(m.opacity<=0 || m.x>starCanvas.clientWidth+220 || m.y>starCanvas.clientHeight+220){
+            meteors.splice(i,1);
+          }
+        }
+      }
+
+      /* ===== Sparkle Particles ===== */
+      function makeSparkleParticle(x,y,vx,vy,size,life,hue,alpha){
+        return {x,y,vx,vy,size,life,born:performance.now(),hue,alpha,spin: Math.random()*Math.PI, shape:'star', jitter: 0.2+Math.random()*0.6};
+      }
+      function drawParticles(now){
+        for(let i=particles.length-1;i>=0;i--){
+          const p = particles[i];
+          const age = now - p.born, t = age / p.life;
+          if(t>=1){particles.splice(i,1); continue;}
+          const fade = 1 - t;
+
+          if(BH.active){
+            const dx = BH.x - p.x, dy = BH.y - p.y;
+            const dist = Math.hypot(dx,dy);
+            const g = (dist>40) ? 0.12 * (BH.r / Math.max(dist*1.6, 80)) : 0.0;
+            p.vx += dx/dist * g; p.vy += dy/dist * g;
+          }
+
+          const tw = 1 + (Math.sin((age*0.02 + i)%6.28)*0.12);
+          const a = p.alpha*fade*tw;
+
+          sctx.save();
+          sctx.translate(p.x, p.y); sctx.rotate(p.spin);
+          const core = Math.max(0.8, p.size*0.9)*fade;
+          const glow = sctx.createRadialGradient(0,0,0, 0,0, core*4);
+          glow.addColorStop(0, `hsla(${p.hue}, 100%, 95%, ${0.9*a})`);
+          glow.addColorStop(1, `hsla(${p.hue}, 100%, 30%, 0)`);
+          sctx.fillStyle = glow;
+          sctx.beginPath(); sctx.arc(0,0, core*2.2, 0, Math.PI*2); sctx.fill();
+
+          sctx.globalAlpha = Math.min(1, a*1.2);
+          sctx.strokeStyle = `hsla(${p.hue},100%,88%,${Math.min(1,a)})`;
+          sctx.lineWidth = 1.1;
+          const L = p.size*3.2*fade;
+          sctx.beginPath(); sctx.moveTo(-L,0); sctx.lineTo(L,0); sctx.stroke();
+          sctx.beginPath(); sctx.moveTo(0,-L); sctx.lineTo(0,L); sctx.stroke();
+          sctx.beginPath(); sctx.moveTo(-L*0.7,-L*0.7); sctx.lineTo(L*0.7,L*0.7); sctx.stroke();
+          sctx.beginPath(); sctx.moveTo(L*0.7,-L*0.7); sctx.lineTo(-L*0.7,L*0.7); sctx.stroke();
+          sctx.restore();
+
+          p.x += p.vx; p.y += p.vy;
+          p.vx *= 0.985; p.vy *= 0.985;
+          p.spin += 0.02*(p.jitter);
+        }
+
+        if(particles.length>MAX_PARTICLES){
+          particles.length = MAX_PARTICLES;
+        }
+      }
+
+      /* ===== Burst / Click ===== */
+      function burstAt(x,y){
+        const count = Math.floor(cfg.burst.count * (BH.active?0.8:1));
+        for(let i=0;i<count;i++){
+          if(particles.length>=MAX_PARTICLES) break;
+          const ang = (Math.PI*2)*(i/count) + Math.random()*0.4;
+          const sp = cfg.burst.speed[0] + Math.random()*(cfg.burst.speed[1]-cfg.burst.speed[0]);
+          particles.push(makeSparkleParticle(
+            x, y,
+            Math.cos(ang)*sp, Math.sin(ang)*sp,
+            1.1 + Math.random()*2.6,
+            cfg.burst.life[0] + Math.random()*(cfg.burst.life[1]-cfg.burst.life[0]),
+            180 + Math.random()*120,
+            0.92
+          ));
+        }
+        spawnMeteor(Math.max(0, Math.min(x, starCanvas.clientWidth)));
+      }
+
+      /* ===== Black Hole ===== */
+      function spawnBH(x,y,force=false){
+        const now = performance.now();
+        if(!force){
+          if(BH.active) return false;
+          if(now - BH.lastGone < BH.cool) return false;
+        }
+        BH.active = true; BH.x = x; BH.y = y; BH.born = now; BH.rippleT = 0; BH.hsAng = 0; BH.prevRect = null;
+        return true;
+      }
+      function killBH(){
+        if(!BH.active) return;
+        for(let i=0;i<40;i++){
+          if(particles.length>=MAX_PARTICLES) break;
+          const ang = Math.random()*Math.PI*2;
+          const sp = 2 + Math.random()*4;
+          particles.push(makeSparkleParticle(BH.x, BH.y, Math.cos(ang)*sp, Math.sin(ang)*sp, 1+Math.random()*2, 500+Math.random()*500, 35+Math.random()*70, 0.95));
+        }
+        BH.active=false; BH.lastGone = performance.now();
+        if(BH.prevRect){
+          const r = BH.prevRect; bctx.clearRect(r.x, r.y, r.w, r.h);
+          BH.prevRect = null;
+        }else{
+          bctx.clearRect(0,0,bhCanvas.clientWidth, bhCanvas.clientHeight);
+        }
+      }
+      function drawRipple(x,y,r,alpha){
+        const g = bctx.createRadialGradient(x,y, r*0.7, x,y,r);
+        g.addColorStop(0, `rgba(200,220,255,${alpha*0.3})`);
+        g.addColorStop(1, `rgba(200,220,255,0)`);
+        bctx.fillStyle = g;
+        bctx.beginPath(); bctx.arc(x,y,r,0,Math.PI*2); bctx.fill();
+      }
+      function drawBH(now){
+        if(!BH.active) return;
+        const age = now - BH.born;
+        if(age > BH.life){ killBH(); return; }
+
+        const pad = 8;
+        if(BH.prevRect){
+          const r = BH.prevRect; bctx.clearRect(r.x, r.y, r.w, r.h);
+        }
+
+        const R = BH.r;
+        const rect = { x: Math.max(0, BH.x - R*2.2 - pad), y: Math.max(0, BH.y - R*1.6 - pad),
+                       w: Math.min(bhCanvas.clientWidth, R*4.4 + pad*2), h: Math.min(bhCanvas.clientHeight, R*3.2 + pad*2) };
+        BH.prevRect = rect;
+
+        bctx.save();
+        bctx.beginPath(); bctx.rect(rect.x, rect.y, rect.w, rect.h); bctx.clip();
+
+        if(age < 700){
+          const t = age/700;
+          drawRipple(BH.x, BH.y, R*(0.8+0.6*t), 0.35*(1-t));
+        }
+
+        bctx.translate(BH.x, BH.y);
+
+        const shadow = bctx.createRadialGradient(0,0,0, 0,0,R*1.02);
+        shadow.addColorStop(0, 'rgba(0,0,0,0.92)');
+        shadow.addColorStop(1, 'rgba(0,0,0,0)');
+        bctx.fillStyle = shadow;
+        bctx.beginPath(); bctx.arc(0,0,R*1.02,0,Math.PI*2); bctx.fill();
+
+        bctx.lineWidth = 2.2;
+        bctx.strokeStyle = BH.eht ? 'rgba(255,180,60,0.85)' : 'rgba(200,230,255,0.9)';
+        bctx.beginPath(); bctx.arc(0,0,R*1.05,0,Math.PI*2); bctx.stroke();
+
+        const rot = (now*0.0005 + scrollSpeedEMA*0.00005) % (Math.PI*2);
+        bctx.rotate(rot);
+        const grd = bctx.createLinearGradient(-R*2,0,R*2,0);
+        if(BH.eht){
+          grd.addColorStop(0, 'rgba(240,110,30,0.0)');
+          grd.addColorStop(0.35, 'rgba(250,150,50,0.35)');
+          grd.addColorStop(0.55, 'rgba(255,210,100,0.75)');
+          grd.addColorStop(0.9, 'rgba(220,80,20,0.2)');
+        }else{
+          grd.addColorStop(0, 'rgba(80,160,255,0.0)');
+          grd.addColorStop(0.35, 'rgba(120,200,255,0.35)');
+          grd.addColorStop(0.55, 'rgba(200,240,255,0.75)');
+          grd.addColorStop(0.9, 'rgba(100,180,255,0.2)');
+        }
+        bctx.fillStyle = grd;
+        bctx.beginPath();
+        bctx.ellipse(0,0, R*1.8, R*0.6, 0, 0, Math.PI*2);
+        bctx.fill();
+
+        bctx.globalAlpha = 0.9;
+        bctx.fillStyle = BH.eht ? 'rgba(255,220,140,0.95)' : 'rgba(220,250,255,0.95)';
+        bctx.beginPath();
+        bctx.ellipse(R*0.6, 0, R*0.7, R*0.16, 0, -0.3, 0.3);
+        bctx.fill();
+
+        bctx.globalAlpha = 1.0;
+        BH.hsAng += 0.02;
+        const hsA = BH.hsAng;
+        const a = R*1.6, b = R*0.5;
+        const hx = a*Math.cos(hsA), hy = b*Math.sin(hsA);
+        const hs = bctx.createRadialGradient(hx,hy,0, hx,hy, R*0.18);
+        hs.addColorStop(0, BH.eht?'rgba(255,230,150,1)':'rgba(220,250,255,1)');
+        hs.addColorStop(1, 'rgba(255,255,255,0)');
+        bctx.fillStyle = hs;
+        bctx.beginPath(); bctx.arc(hx,hy,R*0.12,0,Math.PI*2); bctx.fill();
+
+        bctx.restore();
+      }
+
+      /* ===== Spiral feed ===== */
+      function feedBH(mx,my){
+        if(!BH.active) return;
+        const dx = mx - BH.x, dy = my - BH.y;
+        const dist = Math.hypot(dx,dy);
+        const ang0 = Math.atan2(dy,dx);
+        const T = 1400 + Math.random()*800;
+        const born = performance.now();
+        const hue = 40 + Math.random()*60;
+        const N = 90;
+        for(let i=0;i<N;i++){
+          if(particles.length>=MAX_PARTICLES) break;
+          const t0 = i*6;
+          particles.push({
+            x: mx, y: my, vx:0, vy:0,
+            size: 1.2 + Math.random()*2.2,
+            life: T + t0, born: born - t0,
+            hue, alpha: 0.95, spin: Math.random()*Math.PI, shape:'star', jitter:0.4,
+            spiral:true, r0: dist, ang0: ang0 + Math.random()*0.2-0.1
+          });
+        }
+      }
+      function updateSpiral(p, now){
+        if(!p.spiral || !BH.active) return;
+        const t = (now - p.born)/p.life;
+        const r = p.r0 * (1 - 0.9*t);
+        const ang = p.ang0 + 10*t;
+        p.x = BH.x + r*Math.cos(ang);
+        p.y = BH.y + r*Math.sin(ang);
+        if(t>0.88 && Math.random()<0.25 && particles.length<MAX_PARTICLES){
+          particles.push(makeSparkleParticle(p.x, p.y, (Math.random()-0.5)*1, (Math.random()-0.5)*1, 1+Math.random()*2, 400, 50+Math.random()*70, 0.95));
+        }
+      }
+
+      /* ===== Loop ===== */
+      function loop(now){
+        if(paused){ requestAnimationFrame(loop); return; }
+        tick++;
+
+        const t0 = stars._t0 || (stars._t0 = performance.now());
+        const ease = Math.min(1, (now - t0)/T_TWINKLE_EASE);
+        twinkleGlobal = ease<0.5 ? 4*ease*ease*ease : 1 - Math.pow(-2*ease+2,3)/2;
+
+        sctx.clearRect(0,0,starCanvas.clientWidth, starCanvas.clientHeight);
+
+        drawStars();
+        drawMeteors();
+
+        for(const p of particles){ updateSpiral(p, now); }
+        drawParticles(now);
+
+        // nebula drawing removed
+
+        drawBH(now);
+
+        const rate = cfg.meteor.baseRate + Math.min(0.75, scrollSpeedEMA/1200) + (storm?0.38:0);
+        if(Math.random() < rate*0.016) spawnMeteor();
+
+        requestAnimationFrame(loop);
+      }
+
+      /* ===== Interactions ===== */
+      function onScroll(){
+        const y = window.scrollY, now = performance.now();
+        const dy = Math.abs(y - lastScrollY), dt = Math.max(16, now - lastRAF);
+        scrollSpeedInst = (dy/dt) * 16.6 * 60;
+        const alpha = 1 - Math.exp(-dt/200);
+        scrollSpeedEMA = alpha*scrollSpeedInst + (1-alpha)*scrollSpeedEMA;
+        lastScrollY = y; lastRAF = now;
+      }
+      function inHomeRect(clientX, clientY){
+        const home = document.getElementById('home');
+        const rect = home.getBoundingClientRect();
+        return {rect, inside: clientX>=rect.left && clientX<=rect.right && clientY>=rect.top && clientY<=rect.bottom};
+      }
+      function onClick(e){
+        const {rect, inside} = inHomeRect(e.clientX, e.clientY);
+        if(!inside) return;
+        const x = e.clientX - rect.left, y = e.clientY - rect.top;
+
+        if(BH.active){
+          const d = Math.hypot(x-BH.x,y-BH.y);
+          if(d < BH.r*CLICK.nearFactor){ feedBH(x,y); return; }
+        }
+        const now = performance.now();
+        const canBH = (!BH.active) && (now - BH.lastGone >= BH.cool);
+        const roll = Math.random();
+        if(canBH && roll < CLICK.chanceBH){
+          if(!spawnBH(x,y,false)){ burstAt(x,y); }
+        }else{
+          burstAt(x,y);
+        }
+      }
+      function onKey(e){
+        const k = e.key.toLowerCase();
+        // 'g' (nebula toggle) removed
+        if(k==='m'){ storm = !storm; }
+        else if(k==='b'){
+          if(BH.active) killBH();
+          else{
+            const home = document.getElementById('home').getBoundingClientRect();
+            spawnBH(home.width*0.5, home.height*0.48, true);
+          }
+        }else if(k==='e'){ BH.eht = !BH.eht; }
+      }
+
+      window.addEventListener('resize', resizeAll);
+      document.addEventListener('scroll', onScroll, {passive:true});
+      document.addEventListener('click', onClick);
+      document.addEventListener('keydown', onKey);
+      document.addEventListener('visibilitychange', ()=>{ paused = document.hidden || prefersReduced; });
+
+      resizeAll();
+      if(!prefersReduced){ requestAnimationFrame(loop); }
+    }
+
+    /* ---------------- Page Init ---------------- */
+    document.addEventListener('DOMContentLoaded', ()=>{
+      toggleLanguage('en'); // 默认英文
+
+      window.addEventListener('scroll', ()=>{
+        const hd = document.querySelector('header');
+        hd.style.background = (window.scrollY>50) ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.95)';
+      });
+
+      const sections = document.querySelectorAll('section');
+      const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.style.opacity='1';
+            entry.target.style.transform='translateY(0)';
+          }
+        });
+      }, {threshold:.12});
+      sections.forEach(s=>{
+        s.style.opacity='0'; s.style.transform='translateY(18px)'; s.style.transition='all .55s ease';
+        observer.observe(s);
+      });
+
+      cosmosFX();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="container wrap">
+      <div id="branding"><h1>Jiayue Yang | 杨佳悦</h1></div>
+      <nav style="display:flex; align-items:center;">
+        <ul>
+          <!-- EN -->
+          <li class="current en"><a href="#home">Home</a></li>
+          <li class="en"><a href="#about">About</a></li>
+          <li class="en"><a href="#publications">Research</a></li><!-- 原 Publications 改为 Research -->
+          <li class="en"><a href="#teaching">Teaching</a></li>
+          <li class="en"><a href="#awards">Awards</a></li>
+          <li class="en"><a href="#service">Service</a></li><!-- 新增 -->
+          <li class="en"><a href="#contact">Contact</a></li>
+          <!-- ZH -->
+          <li class="current zh hidden"><a href="#home">主页</a></li>
+          <li class="zh hidden"><a href="#about">关于我</a></li>
+          <li class="zh hidden"><a href="#publications">研究</a></li><!-- 原 论文 改为 研究 -->
+          <li class="zh hidden"><a href="#teaching">教学</a></li>
+          <li class="zh hidden"><a href="#awards">荣誉</a></li>
+          <li class="zh hidden"><a href="#service">服务</a></li><!-- 新增 -->
+          <li class="zh hidden"><a href="#contact">联系</a></li>
+        </ul>
+        <div class="language-toggle">
+          <button id="zh-btn" onclick="toggleLanguage('zh')">中文</button>
+          <button id="en-btn" class="highlight" onclick="toggleLanguage('en')">English</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HOME ===== -->
+  <section id="home">
+    <canvas id="star-canvas"></canvas>
+    <!-- nebula-canvas removed -->
+    <canvas id="bh-canvas"></canvas>
+
+    <div class="content zh hidden">
+      <h1>欢迎来到我的个人主页</h1>
+      <p>滑铁卢大学应用数学博士生 • 量子信息与量子引力研究者</p>
+      <p>探索宇宙奥秘，传播科学之美 🌟</p>
+      <a href="#about" class="button">了解更多</a>
+      <a href="https://scholar.google.ca/citations?user=ahiEMnYAAAAJ&hl=en&oi=sra" class="button" target="_blank">谷歌学术</a>
+      <a href="https://inspirehep.net/authors/2679717?ui-citation-summary=true" class="button" target="_blank">我的Inspirehep</a>
+      <a href="https://efficacious-parcel-4e4.notion.site/My-Notes-1189102951c04e43894e851656b39290" class="button" target="_blank">我的笔记</a>
+      <a href="https://efficacious-parcel-4e4.notion.site/Physics-Tools-de45835163a64cb59f40a222b929a691" class="button" target="_blank">物理工具</a>
+    </div>
+    <div class="content en">
+      <h1>Welcome to My Homepage</h1>
+      <p>PhD student in Applied Math @ University of Waterloo • Quantum Information & Gravity Researcher</p>
+      <p>Exploring the mysteries of the universe, sharing the beauty of science 🌟</p>
+      <a href="#about" class="button">Learn More</a>
+      <a href="https://scholar.google.ca/citations?user=ahiEMnYAAAAJ&hl=en&oi=sra" class="button" target="_blank">Google Scholar</a>
+      <a href="https://inspirehep.net/authors/2679717?ui-citation-summary=true" class="button" target="_blank">My Inspirehep</a>
+      <a href="https://efficacious-parcel-4e4.notion.site/My-Notes-1189102951c04e43894e851656b39290" class="button" target="_blank">My Notes</a>
+      <a href="https://efficacious-parcel-4e4.notion.site/Physics-Tools-de45835163a64cb59f40a222b929a691" class="button" target="_blank">Physics Toolkit</a>
+    </div>
+    <img src="888.jpg" alt="Profile Photo">
+
+    <!-- ===================== VISITS WIDGET: BEGIN (HTML) ===================== -->
+    <div id="visits-widget" class="visits-badge" data-path="/" aria-live="polite">
+      <div class="visits-inner">
+        <div class="star-face" aria-hidden="true">
+          <span class="eye left"></span><span class="eye right"></span><span class="sparkle"></span>
+        </div>
+        <div class="visits-text">
+          <div class="label en">Visits</div>
+          <div class="label zh hidden">访问量</div>
+          <div class="count" data-value="0">0</div>
+          <div class="sub en">Today</div>
+          <div class="sub zh hidden">今日</div>
+          <div class="subcount" data-value="0">0</div>
+        </div>
+      </div>
+    </div>
+    <!-- ===================== VISITS WIDGET: END (HTML) ===================== -->
+
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="container zh hidden">
+    <h2>学术成果一览 | Academic Achievements</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">7</div><div>发表论文</div></div>
+      <div class="stat-card"><div class="stat-number">20+</div><div>学术报告</div></div>
+      <div class="stat-card"><div class="stat-number">825K+</div><div>B站视频播放量</div></div>
+      <div class="stat-card"><div class="stat-number">13.1K+</div><div>B站粉丝数</div></div>
+    </div>
+  </section>
+  <section class="container en">
+    <h2>Academic Achievements | 学术成果一览</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">7</div><div>Publications</div></div>
+      <div class="stat-card"><div class="stat-number">20+</div><div>Presentations</div></div>
+      <div class="stat-card"><div class="stat-number">825K+</div><div>Bilibili Video Views</div></div>
+      <div class="stat-card"><div class="stat-number">13.1K+</div><div>Bilibili Followers</div></div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="container">
+    <div class="zh hidden">
+      <h2>关于我 | About Me</h2>
+      <p>我是<strong>杨佳悦</strong>，目前在加拿大滑铁卢大学攻读应用数学博士学位，同时也是周界理论物理研究所(Perimeter Institute)和量子计算研究所(Institute for Quantum Computing)的研究生。我的研究领域主要集中在量子信息与量子引力的交叉领域。</p>
+      <h3>🎓 教育背景</h3>
+      <ul>
+        <li><strong>博士生</strong> (2024年9月-2028年8月) - 加拿大滑铁卢大学，应用数学，全额奖学金50,800加元×4年，平均成绩95/100</li>
+        <li><strong>硕士</strong> (2022年9月-2024年8月) - 加拿大滑铁卢大学，物理学，全额奖学金44,740加元×2年，平均成绩94.33/100</li>
+        <li><strong>本科</strong> (2018年9月-2022年6月) - 吉林大学唐敖庆班，物理学，平均成绩91.16/100</li>
+      </ul>
+      <h3>🔬 研究兴趣</h3>
+      <ul>
+        <li><strong>量子信息与量子计算 (QIQC)</strong></li>
+        <li><strong>量子引力中的量子信息 (QIQG)</strong></li>
+        <li><strong>相对论性量子信息 (RQI)</strong></li>
+        <li><strong>黑洞热力学(BHT)</strong></li>
+        <li><strong>高能物理理论(HEP-TH)</strong></li>
+        <li><strong>广义相对论与量子宇宙学(GRQC)</strong></li>
+      </ul>
+      <h3>🌟 科研亮点</h3>
+      <p>我的研究兴趣广泛，涵盖黑洞热力学、全息量子信息、相对论量子信息、虫洞解与模拟黑洞等方向。</p>
+    </div>
+    <div class="en">
+      <h2>About Me | 关于我</h2>
+      <p>I am <strong>Jiayue Yang</strong>, a PhD student in Applied Mathematics at the University of Waterloo, Canada, and an Associate Graduate Student at both the Perimeter Institute for Theoretical Physics (PI) and the Institute for Quantum Computing (IQC). My research focuses on the intersection of quantum information and quantum gravity.</p>
+      <h3>🎓 Education</h3>
+      <ul>
+        <li><strong>Ph.D. Student</strong> (Sep 2024 - Aug 2028) - University of Waterloo, Applied Math, Full Scholarship 50,800 CAD×4 years, Average Score 95/100</li>
+        <li><strong>Master's</strong> (Sep 2022 - Aug 2024) - University of Waterloo, Physics,  Full Scholarship 44,740 CAD×2 years, Average Score 94.33/100</li>
+        <li><strong>Bachelor's</strong> (Sep 2018 - Jun 2022) - Tang Aoqing Honors Program, Jilin University, Physics, Average Score 91.16/100</li>
+      </ul>
+      <h3>🔬 Research Interests</h3>
+      <ul>
+        <li><strong>Quantum Information and Quantum Computing (QIQC)</strong></li>
+        <li><strong>Quantum Information in Quantum Gravity (QIQG)</strong></li>
+        <li><strong>Relativistic Quantum Information (RQI)</strong></li>
+        <li><strong>Black Hole Thermodynamics(BHT)</strong></li>
+        <li><strong>High Energy Physics - Theory(HEP-TH)</strong></li>
+        <li><strong>General Relativity and Quantum Cosmology(GRQC)</strong></li>
+      </ul>
+      <h3>🌟 Research Highlights</h3>
+      <p>My research covers a broad range of topics, including black hole thermodynamics, holographic quantum information, relativistic quantum information, wormhole solutions, and analogue black holes. </p>
+    </div>
+  </section>
+
+<!-- ===== RESEARCH (renamed from PUBLICATIONS) ===== -->
+<section id="publications" class="container">
+  <div class="zh hidden">
+    <h2>研究 | Research</h2>
+
+ 
+<div class="publication">
+  <h4> Finite-cutoff Holographic Thermodynamics</h4>
+  <p>Ming Zhang, Wen-Di Tan, Mengqi Lu, Dyuman Bhattacharya, <strong>Yang, J.</strong>, et al.
+    <em>arXiv</em> (2025).
+    arXiv: <a href="https://arxiv.org/abs/2507.01010" target="_blank" rel="noopener">2507.01010 [hep-th]</a>
+    [<a href="https://arxiv.org/pdf/2507.01010" target="_blank" rel="noopener">pdf</a>]
+  </p>
+  <p>在有限截断全息框架下建立热力学体系，将 AdS/CFT 推广到有限径向截断与边界的 T^2 变形 CFT，并给出一致的第一定律与能量定义。</p>
+</div>
+
+<div class="publication">
+  <h4> Critical Slowing Down of Black Hole Phase Transition and Kinetic Crossover in Supercritical Regime</h4>
+  <p>Ran Li, Kun Zhang, <strong>Yang, J.</strong>, Robert B. Mann, Jin Wang.
+    <em>Physical Review D</em> 112 (2025) 6, 064004.
+     DOI: <a href="https://doi.org/10.1103/z8bq-kvq3" target="_blank" rel="noopener">10.1103/z8bq-kvq3</a></p>
+  <p>研究 RN–AdS 黑洞在超临界点附近的动力学，揭示显著的“临界减速”；在超临界区识别出动力学 Widom 线，与热力学 Widom 线高度一致。</p>
+</div>
+
+    
+    <div class="publication">
+      <h4> On Thermodynamics of Charged and Accelerating Black Holes</h4>
+      <p>Hale, T., Kubizňák, D., Menšíková, J., Mann, R. B., <strong>Yang, J.</strong>. 
+        <em>Physical Review D</em> 111 (2025) 104004. 
+        DOI: <a href="https://doi.org/10.1103/PhysRevD.111.104004" target="_blank" rel="noopener">10.1103/PhysRevD.111.104004</a></p>
+      <p>关于带电加速 AdS 黑洞热力学的综述，澄清规范化与配分函数等关键问题。</p>
+    </div>
+    
+    <div class="publication">
+      <h4> Smart Holes: Analogue Black Holes with the Right Temperature and Entropy</h4>
+      <p><strong>Yang, J.</strong>, Afshordi, N., Torabian, M., Jafari, S. A., Baskaran, G. 
+        <em>Journal of High Energy Physics</em> (JHEP) 07 (2025) 226. 
+        DOI: <a href="https://doi.org/10.1007/JHEP07(2025)226" target="_blank" rel="noopener">10.1007/JHEP07(2025)226</a></p>
+      <p>提出“智能洞”类比黑洞，可同时模拟真实黑洞的温度与熵。</p>
+    </div>
+
+
+    <div class="publication">
+      <h4> Existence of Vacuum Wormholes in Einsteinian Cubic Gravity</h4>
+      <p>Lu, M., <strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Journal of High Energy Physics</em> (JHEP) 03 (2025) 073. 
+        DOI: <a href="https://doi.org/10.1007/JHEP03(2025)073" target="_blank" rel="noopener">10.1007/JHEP03(2025)073</a></p>
+      <p>在爱因斯坦立方引力中构造无需外来物质的真空虫洞解，并验证可穿越性。</p>
+    </div>
+
+    <div class="publication">
+      <h4> Gravitational Wormholes</h4>
+      <p>Lu, M., <strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Universe</em> 10(6), 257 (2024). 
+        DOI: <a href="https://doi.org/10.3390/universe10060257" target="_blank" rel="noopener">10.3390/universe10060257</a></p>
+      <p>邀稿：关于纯引力虫洞的研究，尤其是高阶曲率理论中的可穿越虫洞。</p>
+    </div>
+
+    <div class="publication">
+      <h4> Complexity, Scaling, and a Phase Transition</h4>
+      <p><strong>Yang, J.</strong>, Frey, A. R. 
+        <em>Journal of High Energy Physics</em> (JHEP) 09 (2023) 029. 
+        DOI: <a href="https://doi.org/10.1007/JHEP09(2023)029" target="_blank" rel="noopener">10.1007/JHEP09(2023)029</a></p>
+      <p>研究圆上紧化 CFT 的全息复杂度，发现复杂度在相变中可作序参量，并满足标度律。</p>
+    </div>
+
+    <div class="publication">
+      <h4> Dynamic Behaviours of Black Hole Phase Transitions Near Quadruple Points</h4>
+      <p><strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Journal of High Energy Physics</em> (JHEP) 08 (2023) 028. 
+        DOI: <a href="https://doi.org/10.1007/JHEP08(2023)028" target="_blank" rel="noopener">10.1007/JHEP08(2023)028</a></p>
+      <p>首次研究黑洞四重点附近的相变动力学，揭示弱/强振荡等丰富现象。</p>
+    </div>
+  </div>
+
+  <div class="en">
+    <h2>Research | 研究</h2>
+
+<div class="publication">
+  <h4> Finite-cutoff Holographic Thermodynamics</h4>
+  <p>Ming Zhang, Wen-Di Tan, Mengqi Lu, Dyuman Bhattacharya, <strong>Yang, J.</strong>, et al.
+    <em>arXiv</em> (2025).
+    arXiv: <a href="https://arxiv.org/abs/2507.01010" target="_blank" rel="noopener">2507.01010 [hep-th]</a>
+    [<a href="https://arxiv.org/pdf/2507.01010" target="_blank" rel="noopener">pdf</a>]
+  </p>
+  <p>Develops a framework for holographic thermodynamics in finite-cutoff holography, coupling a finite radial cutoff in AdS to a boundary T^2-deformed CFT and formulating consistent first laws/energetics.</p>
+</div>
+
+<div class="publication">
+  <h4>Critical Slowing Down of Black Hole Phase Transition and Kinetic Crossover in Supercritical Regime</h4>
+  <p>Ran Li, Kun Zhang, <strong>Yang, J.</strong>, Robert B. Mann, Jin Wang.
+    <em>Physical Review D</em> 112 (2025) 6, 064004.
+     DOI: <a href="https://doi.org/10.1103/z8bq-kvq3" target="_blank" rel="noopener">10.1103/z8bq-kvq3</a></p>
+  <p>Shows pronounced critical slowing down near spinodal/critical points in RN–AdS black holes and identifies a kinetic Widom line in the supercritical regime matching the thermodynamic one.</p>
+</div>
+
+
+        <div class="publication">
+      <h4> On Thermodynamics of Charged and Accelerating Black Holes</h4>
+      <p>Hale, T., Kubizňák, D., Menšíková, J., Mann, R. B., <strong>Yang, J.</strong>. 
+        <em>Physical Review D</em> 111 (2025) 104004. 
+        DOI: <a href="https://doi.org/10.1103/PhysRevD.111.104004" target="_blank" rel="noopener">10.1103/PhysRevD.111.104004</a></p>
+      <p>Revisits the thermodynamics of charged slowly accelerating AdS black holes, clarifying key normalization and action issues.</p>
+    </div>
+
+    <div class="publication">
+      <h4> Smart Holes: Analogue Black Holes with the Right Temperature and Entropy</h4>
+      <p><strong>Yang, J.</strong>, Afshordi, N., Torabian, M., Jafari, S. A., Baskaran, G. 
+        <em>Journal of High Energy Physics</em> (JHEP) 07 (2025) 226. 
+        DOI: <a href="https://doi.org/10.1007/JHEP07(2025)226" target="_blank" rel="noopener">10.1007/JHEP07(2025)226</a></p>
+      <p>Proposes “smart holes,” analogue black holes that match both temperature and entropy of GR black holes.</p>
+    </div>
+
+
+
+    <div class="publication">
+      <h4> Existence of Vacuum Wormholes in Einsteinian Cubic Gravity</h4>
+      <p>Lu, M., <strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Journal of High Energy Physics</em> (JHEP) 03 (2025) 073. 
+        DOI: <a href="https://doi.org/10.1007/JHEP03(2025)073" target="_blank" rel="noopener">10.1007/JHEP03(2025)073</a></p>
+      <p>Discovers vacuum wormhole solutions in Einsteinian Cubic Gravity without exotic matter and verifies traversability.</p>
+    </div>
+
+    <div class="publication">
+      <h4> Gravitational Wormholes</h4>
+      <p>Lu, M., <strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Universe</em> 10(6), 257 (2024). 
+        DOI: <a href="https://doi.org/10.3390/universe10060257" target="_blank" rel="noopener">10.3390/universe10060257</a></p>
+      <p>Invited paper for gravitational wormholes, with emphasis on higher-curvature theories.</p>
+    </div>
+
+    <div class="publication">
+      <h4> Complexity, Scaling, and a Phase Transition</h4>
+      <p><strong>Yang, J.</strong>, Frey, A. R. 
+        <em>Journal of High Energy Physics</em> (JHEP) 09 (2023) 029. 
+        DOI: <a href="https://doi.org/10.1007/JHEP09(2023)029" target="_blank" rel="noopener">10.1007/JHEP09(2023)029</a></p>
+      <p>Shows that holographic complexity on a circle acts as an order parameter and obeys a scaling relation.</p>
+    </div>
+
+    <div class="publication">
+      <h4> Dynamic Behaviours of Black Hole Phase Transitions Near Quadruple Points</h4>
+      <p><strong>Yang, J.</strong>, Mann, R. B. 
+        <em>Journal of High Energy Physics</em> (JHEP) 08 (2023) 028. 
+        DOI: <a href="https://doi.org/10.1007/JHEP08(2023)028" target="_blank" rel="noopener">10.1007/JHEP08(2023)028</a></p>
+      <p>First study of dynamics near black hole quadruple points, revealing rich oscillatory phenomena.</p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- ===== (REMOVED) RESEARCH EXPERIENCE SECTION ===== -->
+  <!-- 已按你的要求删除 id="research" 版块 -->
+
+  <!-- ================== TEACHING ================== -->
+  <section id="teaching" class="container">
+    <div class="zh hidden">
+      <h2>教学经历 | Teaching Experience</h2>
+      <h3>🎓 大学教学助理经历</h3>
+      <ul>
+        <li><strong>量子理论3</strong> (2025年1月-4月) - 滑铁卢大学应用数学系助教</li>
+        <li><strong>天文学导论</strong> (2023年5月-12月) - 滑铁卢大学SCI 238课程助教</li>
+      </ul>
+      <h3>📺 在线教学课程 (B站免费课程)</h3>
+      <ul>
+        <li><strong>量子场论</strong> (2023年11月至今)</li>
+        <li><strong>广义相对论</strong> (2023年9月至今)</li>
+        <li><strong>分析力学</strong> (2020年3月-2021年1月)</li>
+        <li><strong>数学物理方法</strong> (2020年1月-2021年1月)</li>
+      </ul>
+      <h3>🎤 学术报告与演讲 (近期)</h3>
+      <ul>
+        <li><strong>从黑洞热力学到黑洞化学</strong> - 滑铁卢大学AMATH研究生小型会议 (2025年1月)</li>
+        <li><strong>从黑洞热力学到黑洞化学</strong> - 南科大第二届研讨会 (2025年1月)</li>
+        <li><strong>复杂度、标度和相变</strong> - 江西师范大学 (2024年12月)</li>
+        <li><strong>黑洞四重点附近的相变动力学行为</strong> - 巡回报告 (2024年10月-12月)</li>
+      </ul>
+      <h3>📚 科普教育工作</h3>
+      <ul>
+        <li><strong>B站科普视频</strong> - 超过76.5万播放量，1.28万粉丝关注</li>
+        <li><strong>科学普及活动</strong> - 组织分发免费科普书籍给全国青少年</li>
+      </ul>
+    </div>
+    <div class="en">
+      <h2>Teaching Experience | 教学经历</h2>
+      <h3>🎓 University Teaching Assistant</h3>
+      <ul>
+        <li><strong>Quantum Theory 3</strong> (Jan-Apr 2025) - Dept. of Applied Math, University of Waterloo</li>
+        <li><strong>Introductory Astronomy</strong> (May-Dec 2023) - SCI 238, University of Waterloo</li>
+      </ul>
+      <h3>📺 Online Teaching Courses (Free Bilibili Courses)</h3>
+      <ul>
+        <li><strong>Quantum Field Theory</strong> (Nov 2023-Present)</li>
+        <li><strong>General Relativity</strong> (Sep 2023-Present)</li>
+        <li><strong>Analytical Mechanics</strong> (Mar 2020-Jan 2021)</li>
+        <li><strong>Methods of Mathematical Physics</strong> (Jan 2020-Jan 2021)</li>
+      </ul>
+      <h3>🎤 Recent Academic Presentations</h3>
+      <ul>
+        <li><strong>From Black Hole Thermodynamics to Black Hole Chemistry</strong> - UWaterloo AMATH Graduate Mini-Conference (Jan 2025)</li>
+        <li><strong>From Black Hole Thermodynamics to Black Hole Chemistry</strong> - SUSTech 2nd Workshop (Jan 2025)</li>
+        <li><strong>Complexity, Scaling, and a Phase Transition</strong> - Jiangxi Normal University (Dec 2024)</li>
+        <li><strong>Dynamic Behaviours of Black Hole Phase Transitions</strong> - Multi-university tour (Oct-Dec 2024)</li>
+      </ul>
+      <h3>📚 Science Outreach</h3>
+      <ul>
+        <li><strong>Bilibili Science Videos</strong> - Over 765K views, 12.8K followers</li>
+        <li><strong>Science Popularization</strong> - Organizing free science book distribution nationwide</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section id="awards" class="container">
+    <div class="zh hidden">
+      <h2>获奖荣誉 | Awards & Honors</h2>
+      <h3>🏆 最新获奖 (2024-2025)</h3>
+      <div class="award"><strong>Alan George学生领导力奖</strong> - 2500加元 (滑铁卢大学2025年唯一获得者)</div>
+      <div class="award"><strong>David Johnston国际学生入学奖学金</strong> - 5000加元 (2024-2025)</div>
+      <div class="award"><strong>量子计算研究所入学奖</strong> - 5000加元 (2024)</div>
+      <div class="award"><strong>教务长博士入学奖学金(女性)</strong> - 5000加元 (2024)</div>
+      <h3>💰 奖学金类</h3>
+      <div class="award"><strong>Mitacs Globalink研究生奖学金</strong> - 15000加元 (2022-2023)</div>
+      <div class="award"><strong>院长奖学金</strong> - 1600加元 (2022)</div>
+      <div class="award"><strong>石溪大学优秀学生学费奖学金</strong> - 24740美元 (2020年，273人中排名第2)</div>
+      <div class="award"><strong>Mitacs Globalink本科研究奖学金</strong> - 1200加元 (2021)</div>
+      <h3>🥇 竞赛类荣誉</h3>
+      <div class="award"><strong>中国大学生物理学术竞赛全国决赛二等奖</strong> (2019年8月)</div>
+      <div class="award"><strong>东北地区大学生物理学术竞赛一等奖</strong> (2019年5月)</div>
+      <div class="award"><strong>吉林大学大学生物理学术竞赛一等奖</strong> (2019年3月)</div>
+      <div class="award"><strong>吉林大学2018天文知识竞赛冠军</strong> (2018年12月)</div>
+      <h3>📜 学术荣誉</h3>
+      <div class="award"><strong>Wolfram Technology认证</strong> - Mathematica一级认证 (2021年2月)</div>
+      <div class="award"><strong>唐敖庆荣誉班科研实践二等奖</strong> - 团队奖 (2020年6月)</div>
+      <div class="award"><strong>学院优秀学生奖学金</strong> - 前10% (2020年4月)</div>
+      <h3>🌟 国际交流经历</h3>
+      <div class="award"><strong>剑桥大学学术项目证书</strong> - 统计物理 (2021年7月)</div>
+      <div class="award"><strong>北京大学理论物理与粒子物理暑期学校</strong> (2021年8月)</div>
+      <div class="award"><strong>四川大学时空与几何项目</strong> (2021年5月-6月)</div>
+    </div>
+    <div class="en">
+      <h2>Awards & Honors | 获奖荣誉</h2>
+      <h3>🏆 Recent Awards (2024-2025)</h3>
+      <div class="award"><strong>Alan George Student Leadership Award</strong> - 2500 CAD (Only recipient at UWaterloo 2025)</div>
+      <div class="award"><strong>David Johnston International Student Entrance Scholarship</strong> - 5000 CAD (2024-2025)</div>
+      <div class="award"><strong>Institute for Quantum Computing Entrance Award</strong> - 5000 CAD (2024)</div>
+      <div class="award"><strong>Provost Doctoral Entrance Award for Women</strong> - 5000 CAD (2024)</div>
+      <h3>💰 Scholarships</h3>
+      <div class="award"><strong>Mitacs Globalink Graduate Fellowship</strong> - 15000 CAD (2022-2023)</div>
+      <div class="award"><strong>Dean's Scholarship</strong> - 1600 CAD (2022)</div>
+      <div class="award"><strong>Stony Brook University Tuition Scholarship</strong> - $24740 USD (2020, 2/273)</div>
+      <div class="award"><strong>Mitacs Globalink Research Internship Award</strong> - 1200 CAD (2021)</div>
+      <h3>🥇 Competition Honors</h3>
+      <div class="award"><strong>Second Prize, China Undergraduate Physics Tournament (National Finals)</strong> (Aug 2019)</div>
+      <div class="award"><strong>First Prize, Northeast China Undergraduate Physics Tournament</strong> (May 2019)</div>
+      <div class="award"><strong>First Prize, Jilin University Physics Tournament</strong> (Mar 2019)</div>
+      <div class="award"><strong>Champion, Astronomy Knowledge Competition, Jilin University</strong> (Dec 2018)</div>
+      <h3>📜 Academic Honors</h3>
+      <div class="award"><strong>Wolfram Technology Certified Level 1</strong> - Mathematica (Feb 2021)</div>
+      <div class="award"><strong>Second Team Prize, Tang Aoqing Honors Program Research</strong> - Team Award (Jun 2020)</div>
+      <div class="award"><strong>College Excellent Student Scholarship</strong> - Top 10% (Apr 2020)</div>
+      <h3>🌟 International Exchange</h3>
+      <div class="award"><strong>Cambridge Academic Programme Certificate</strong> - Statistical Physics (Jul 2021)</div>
+      <div class="award"><strong>Peking University Summer School in Theoretical Physics</strong> (Aug 2021)</div>
+      <div class="award"><strong>Sichuan University Spacetime and Geometry Program</strong> (May-Jun 2021)</div>
+    </div>
+  </section>
+
+  
+  <!-- ===== SERVICE (NEW) ===== -->
+  <section id="service" class="container">
+    <div class="zh hidden">
+      <h2>志愿与服务 | Service</h2>
+      <ul>
+        <li>帮助青少年的志愿服务活动 (2020-至今) — 在B站开设免费物理课程，累计播放量765,000+，粉丝12,810+</li>
+        <li>帮助青少年的志愿服务活动 (2020-至今) — 创建物理俱乐部网站，分享学习经验、课程与笔记</li>
+        <li>帮助青少年的志愿服务活动 (2022-至今) — 建立“国际留学经验分享群”</li>
+        <li>激励青少年的志愿服务活动 (2022-至今) — 采访世界各地著名科学家以启发学生</li>
+        <li>IQC学生暑期会议组织者 (2025年1月30日–7月23日，每周1小时)</li>
+        <li>“Ask a Scientist”志愿活动 (2025年6月25日，1小时) — 参加PI 25周年庆，向公众答疑解惑（滑铁卢，加拿大）</li>
+        <li>IQC 展览讲解志愿活动 (2025年6月7日，3小时)（滑铁卢，加拿大）</li>
+        <li>中国天文知识竞赛学术委员会 (东北赛区) (2024年、2025年，共20小时) — 线上</li>
+        <li>Quantum Lab Days 志愿活动 (2025年4月17日，2小时；4月16日，4小时) — 指导青少年做量子密钥分发实验（滑铁卢，加拿大）</li>
+        <li>Galileo 展览公众开放日志愿活动 (2025年2月17日，4小时)</li>
+      </ul>
+    </div>
+    <div class="en">
+      <h2>Service | 志愿与服务</h2>
+      <ul>
+        <li>Volunteer Service Activities to Help Young Students (2020–Present) – Teaching free online courses on Bilibili with 765,000+ views and 12,810+ subscribers</li>
+        <li>Volunteer Service Activities to Help Young Students (2020–Present) – Set up a physics club website to share my learning experience, my courses, and notes</li>
+        <li>Volunteer Service Activities to Help Young Students (2022–Present) – Establish the “International Study Experience Sharing Group”</li>
+        <li>Volunteer Service Activities to Inspire Young Students (2022–Present) – Interview famous scientists worldwide to inspire young students</li>
+        <li>Organizer of “IQC Student Summer Conference 2025” (Jan 30–Jul 23, 2025; 1 hr/week) – Waterloo, Canada</li>
+        <li>Volunteer Service to “Ask a Scientist” (June 25, 2025; 1 hr) – Perimeter’s 25th anniversary public Q&A, Waterloo, Canada</li>
+        <li>Volunteer Service to IQC Exhibit Tours (June 7, 2025; 3 hrs) – Waterloo, Canada</li>
+        <li>Volunteer Service to Astronomy Knowledge Competition (Apr 2024 & 2025; 20 hrs) – Academic Committee, Northeast region (Online)</li>
+        <li>Volunteer Service to Quantum Lab Days (Apr 17, 2025; 2 hrs & Apr 16, 2025; 4 hrs) – Guide teenagers in QKD experiments, Waterloo, Canada</li>
+        <li>Volunteer Service to Galileo Exhibit Public Days (Feb 17, 2025; 4 hrs)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="container">
+    <div class="zh hidden">
+      <h2>联系方式 | Contact Information</h2>
+      <div class="contact-info">
+        <div class="contact-card">
+          <h4>📧 邮箱</h4>
+          <p><a href="mailto:j43yang@uwaterloo.ca">j43yang@uwaterloo.ca</a></p>
+        </div>
+        <div class="contact-card">
+          <h4>🌐 个人网站</h4>
+          <p><a href="https://link3.cc/jiayue" target="_blank">https://link3.cc/jiayue</a></p>
+        </div>
+        <div class="contact-card">
+          <h4>📺 B站频道</h4>
+          <p><a href="https://space.bilibili.com/YOUR_BILIBILI_ID" target="_blank">物理科普视频</a></p>
+          <p>76.5万播放量 • 1.28万粉丝</p>
+        </div>
+      </div>
+      <h3>🏛️ 工作地址</h3>
+      <p><strong>滑铁卢大学应用数学系</strong><br>200 University Avenue West<br>Waterloo, ON, Canada N2L 3G1</p>
+      <p><strong>周界理论物理研究所</strong><br>31 Caroline Street North<br>Waterloo, ON, Canada N2L 2Y5</p>
+    </div>
+    <div class="en">
+      <h2>Contact Information | 联系方式</h2>
+      <div class="contact-info">
+        <div class="contact-card">
+          <h4>📧 Email</h4>
+          <p><a href="mailto:j43yang@uwaterloo.ca">j43yang@uwaterloo.ca</a></p>
+        </div>
+        <div class="contact-card">
+          <h4>🌐 Personal Website</h4>
+          <p><a href="https://link3.cc/jiayue" target="_blank">https://link3.cc/jiayue</a></p>
+        </div>
+        <div class="contact-card">
+          <h4>📺 Bilibili Channel</h4>
+          <p><a href="https://space.bilibili.com/YOUR_BILIBILI_ID" target="_blank">Physics Education Videos</a></p>
+          <p>765K+ Views • 12.8K+ Followers</p>
+        </div>
+      </div>
+      <h3>🏛️ Office Address</h3>
+      <p><strong>Department of Applied Mathematics, University of Waterloo</strong><br>200 University Avenue West<br>Waterloo, ON, Canada N2L 3G1</p>
+      <p><strong>Perimeter Institute for Theoretical Physics</strong><br>31 Caroline Street North<br>Waterloo, ON, Canada N2L 2Y5</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 杨佳悦 | Jiayue Yang. All rights reserved.</p>
+      <p>滑铁卢大学 应用数学博士生 | PhD student in Applied Mathematics, University of Waterloo, PI, and IQC</p>
+      <p>⭐ "探索宇宙奥秘，传播科学之美" | "Exploring the mysteries of the universe, sharing the beauty of science" ⭐</p>
+    </div>
+  </footer>
+
+  <script>
+    // 移动端长按 -> 点击爆裂
+    document.addEventListener('touchstart', (e)=>{
+      const home = document.getElementById('home');
+      const rect = home.getBoundingClientRect();
+      const t = e.touches[0];
+      const x = t.clientX - rect.left, y = t.clientY - rect.top;
+      if(x>=0 && y>=0 && x<=rect.width && y<=rect.height){
+        const clickEvent = new MouseEvent('click', {clientX:t.clientX, clientY:t.clientY, bubbles:true});
+        document.dispatchEvent(clickEvent);
+      }
+    }, {passive:true});
+  </script>
+
+  <!-- ===================== VISITS WIDGET: BEGIN (JS) ===================== -->
+  <script>
+  (function(){
+    const W = document.getElementById('visits-widget');
+    if(!W) return;
+
+    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const API_PRIMARY = (window.VISITS_API || '/api/hit'); // 你自己的后端（可保持默认，备用走 CountAPI）
+    const path = (W.getAttribute('data-path') || location.pathname || '/').split('?')[0];
+
+    // 备用：CountAPI（公开计数服务，临时用）
+    const COUNTAPI_NAMESPACE = 'jiayue-homepage-demo';
+    const countApi = {
+      hit: `https://api.countapi.xyz/hit/${encodeURIComponent(COUNTAPI_NAMESPACE)}/${encodeURIComponent(path)}`,
+      get: `https://api.countapi.xyz/get/${encodeURIComponent(COUNTAPI_NAMESPACE)}/${encodeURIComponent(path)}`
+    };
+
+    const elCount = W.querySelector('.count');
+    const elSubCount = W.querySelector('.subcount');
+
+    function tweenNumber(el, from, to, dur=600){
+      if(prefersReduced || from===to){ el.textContent = String(to); el.dataset.value = to; return; }
+      const t0 = performance.now();
+      const ease = t => t<.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+      function frame(now){
+        const p = Math.min(1, (now - t0)/dur);
+        const v = Math.round(from + (to - from)*ease(p));
+        el.textContent = String(v);
+        if(p<1) requestAnimationFrame(frame); else el.dataset.value = to;
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function celebratoryBurst(){
+      if(prefersReduced) return;
+      // 你的 burstAt 在 cosmosFX 内部作用域，这里无法直接访问；
+      // 为了保持“原代码不改动”，我们只在 window.burstAt 存在时才调用（默认不会触发，不会报错）。
+      if(typeof window.burstAt === 'function'){
+        const rect = W.getBoundingClientRect();
+        const x = rect.left + rect.width/2;
+        const y = rect.top + rect.height/2;
+        window.burstAt(x, y);
+      }
+    }
+
+    function seenTodayKey(){
+      const d = new Date();
+      const day = d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+      return `visits:seen:${path}:${day}`;
+    }
+
+    async function fetchPrimary(){
+      const url = `${API_PRIMARY}?path=${encodeURIComponent(path)}`;
+      const r = await fetch(url, { method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store' });
+      if(!r.ok) throw new Error('primary api fail');
+      return r.json();
+    }
+    async function fetchCountApiHit(){
+      const r = await fetch(countApi.hit, {mode:'cors', cache:'no-store'});
+      if(!r.ok) throw new Error('countapi fail');
+      const j = await r.json();
+      return { ok:true, total:j.value, unique_today: undefined };
+    }
+    async function fetchCountApiGet(){
+      const r = await fetch(countApi.get, {mode:'cors', cache:'no-store'});
+      if(!r.ok) throw new Error('countapi get fail');
+      const j = await r.json();
+      return { ok:true, total:j.value, unique_today: undefined };
+    }
+
+    function updateUI(total, today){
+      const fromMain = parseInt(elCount.dataset.value||'0',10);
+      const fromSub  = parseInt(elSubCount.dataset.value||'0',10);
+      tweenNumber(elCount, fromMain, Math.max(0, total|0));
+      if(typeof today === 'number'){
+        tweenNumber(elSubCount, fromSub, Math.max(0, today|0));
+      }else{
+        elSubCount.textContent = '—';
+      }
+    }
+
+    async function init(){
+      try{
+        const data = await fetchPrimary();
+        if(data && data.ok){
+          updateUI(data.total ?? 0, data.unique_today);
+          if(data.incremented){ celebratoryBurst(); }
+          localStorage.setItem(seenTodayKey(), '1');
+          return;
+        }
+        throw new Error('primary bad payload');
+      }catch(e){
+        try{
+          const key = seenTodayKey();
+          const seen = localStorage.getItem(key) === '1';
+          const payload = await (seen ? fetchCountApiGet() : fetchCountApiHit());
+          updateUI(payload.total ?? 0, undefined);
+          if(!seen) celebratoryBurst();
+          localStorage.setItem(key, '1');
+        }catch(e2){
+          const localKey = `visits:local:${path}`;
+          const n = parseInt(localStorage.getItem(localKey)||'0',10)+1;
+          localStorage.setItem(localKey, String(n));
+          updateUI(n, undefined);
+        }
+      }
+    }
+
+    if('requestIdleCallback' in window){
+      requestIdleCallback(init, {timeout: 1200});
+    }else{
+      setTimeout(init, 400);
+    }
+  })();
+  </script>
+  <!-- ===================== VISITS WIDGET: END (JS) ===================== -->
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
