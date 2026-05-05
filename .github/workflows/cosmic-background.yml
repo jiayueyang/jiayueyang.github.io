@@ -1,0 +1,50 @@
+name: Apply cosmic background update
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch homepage background
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          data = path.read_bytes()
+
+          old_root = b"""    :root{\r\n      --accent-a:#667eea; --accent-b:#764ba2;\r\n      --glass: rgba(255,255,255,0.95);\r\n      --shadow: 0 10px 40px rgba(0,0,0,.1);\r\n    }"""
+          new_root = b"""    :root{\n      --accent-a:#9d7cff; --accent-b:#d95bff;\n      --cosmos-deep:#090019; --cosmos-violet:#341065;\n      --glass: rgba(255,255,255,0.95);\n      --shadow: 0 10px 40px rgba(0,0,0,.1);\n    }"""
+
+          old_body_bg = b"""      background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%);"""
+          new_body_bg = b"""      background:\n        radial-gradient(circle at 18% 8%, rgba(217,91,255,.42), transparent 28rem),\n        radial-gradient(circle at 86% 14%, rgba(76,210,255,.22), transparent 24rem),\n        radial-gradient(circle at 50% 112%, rgba(157,124,255,.36), transparent 34rem),\n        linear-gradient(135deg, var(--cosmos-deep) 0%, var(--cosmos-violet) 48%, #13042d 100%);\n      background-attachment: fixed;"""
+
+          old_home = b"""    #home{\r\n      position:relative; min-height:72vh; padding-top:120px;\r\n      display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; overflow:hidden;\r\n      scroll-margin-top:120px;\r\n    }\r\n    #home::before{content:''; position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:0}\r\n\r\n    /* Double canvas (nebula removed) */"""
+          new_home = b"""    #home{\n      position:relative; min-height:72vh; padding-top:120px;\n      display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; overflow:hidden;\n      scroll-margin-top:120px;\n      background:\n        radial-gradient(circle at 22% 28%, rgba(244,119,255,.48), transparent 20rem),\n        radial-gradient(circle at 72% 18%, rgba(93,126,255,.38), transparent 22rem),\n        radial-gradient(circle at 52% 78%, rgba(30,224,255,.18), transparent 24rem),\n        linear-gradient(145deg, #070014 0%, #22064e 46%, #5a1497 76%, #12062c 100%);\n    }\n    #home::before{\n      content:''; position:absolute; inset:0; z-index:0;\n      background:\n        radial-gradient(circle at center, rgba(255,255,255,.08), transparent 32%),\n        linear-gradient(180deg, rgba(4,0,16,.12), rgba(4,0,16,.34));\n    }\n    #home::after{\n      content:''; position:absolute; inset:0; z-index:2; pointer-events:none;\n      background:\n        radial-gradient(circle at 17% 26%, rgba(255,255,255,.78) 0 1px, transparent 1.5px),\n        radial-gradient(circle at 42% 18%, rgba(255,255,255,.58) 0 1px, transparent 1.5px),\n        radial-gradient(circle at 77% 34%, rgba(255,255,255,.68) 0 1px, transparent 1.5px),\n        radial-gradient(circle at 65% 68%, rgba(255,255,255,.52) 0 1px, transparent 1.5px),\n        radial-gradient(circle at 29% 76%, rgba(255,255,255,.62) 0 1px, transparent 1.5px);\n      opacity:.55;\n      filter: drop-shadow(0 0 8px rgba(217,91,255,.8));\n    }\n    /* Double canvas */"""
+
+          old_motion = b"""    @media (prefers-reduced-motion: reduce){\r\n      #home .content, #home h1{animation:none!important}\r\n      /* nebula styles removed */\r\n    }\r\n#home::before {\r\n  content:'';\r\n  position:absolute;\r\n  inset:0;\r\n  background:rgba(0,0,0,.12); /* \xe6\x9b\xb4\xe9\x80\x8f\xe4\xba\xae\xe7\x9a\x84\xe8\x83\x8c\xe6\x99\xaf */\r\n  z-index:0;\r\n}\r\n\r\n/* ===================== VISITS WIDGET: BEGIN (CSS) ===================== */"""
+          new_motion = b"""    @media (prefers-reduced-motion: reduce){\n      #home .content, #home h1{animation:none!important}\n    }\n\n/* ===================== VISITS WIDGET: BEGIN (CSS) ===================== */"""
+
+          for old, new in [(old_root, new_root), (old_body_bg, new_body_bg), (old_home, new_home), (old_motion, new_motion)]:
+              if old not in data:
+                  raise SystemExit('Expected CSS block was not found')
+              data = data.replace(old, new, 1)
+
+          path.write_bytes(data)
+          PY
+      - name: Commit patched homepage and remove workflow
+        run: |
+          rm .github/workflows/cosmic-background.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/cosmic-background.yml
+          git commit -m "Refresh cosmic purple background"
+          git push
