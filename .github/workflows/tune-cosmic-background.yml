@@ -1,0 +1,85 @@
+name: Tune cosmic homepage background
+
+on:
+  push:
+    paths:
+      - .github/workflows/tune-cosmic-background.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch homepage
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8', newline='')
+
+          def sub(pattern, repl, label, flags=re.S):
+              global text
+              text, n = re.subn(pattern, repl, text, count=1, flags=flags)
+              if n != 1:
+                  raise SystemExit(f'Patch failed: {label} ({n})')
+
+          sub(r":root\{\n\s*--accent-a:#9d7cff; --accent-b:#d95bff;\n\s*--cosmos-deep:#090019; --cosmos-violet:#341065;",
+              ":root{\n      --accent-a:#8f7dff; --accent-b:#d35cff;\n      --cosmos-deep:#03040d; --cosmos-violet:#1c1445;",
+              'root colors')
+
+          sub(r"background:\n\s*radial-gradient\(circle at 18% 8%, rgba\(217,91,255,\.42\), transparent 28rem\),\n\s*radial-gradient\(circle at 86% 14%, rgba\(76,210,255,\.22\), transparent 24rem\),\n\s*radial-gradient\(circle at 50% 112%, rgba\(157,124,255,\.36\), transparent 34rem\),\n\s*linear-gradient\(135deg, var\(--cosmos-deep\) 0%, var\(--cosmos-violet\) 48%, #13042d 100%\);",
+              "background:\n        radial-gradient(circle at 16% 8%, rgba(134,78,255,.28), transparent 26rem),\n        radial-gradient(circle at 86% 12%, rgba(73,160,255,.16), transparent 24rem),\n        radial-gradient(circle at 50% 112%, rgba(203,75,255,.18), transparent 34rem),\n        linear-gradient(135deg, var(--cosmos-deep) 0%, var(--cosmos-violet) 44%, #08091a 100%);",
+              'body background')
+
+          sub(r"#home\{\n\s*position:relative; min-height:72vh; padding-top:120px;\n\s*display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; overflow:hidden;\n\s*scroll-margin-top:120px;\n\s*background:\n\s*radial-gradient\(circle at 22% 28%, rgba\(244,119,255,\.48\), transparent 20rem\),\n\s*radial-gradient\(circle at 72% 18%, rgba\(93,126,255,\.38\), transparent 22rem\),\n\s*radial-gradient\(circle at 52% 78%, rgba\(30,224,255,\.18\), transparent 24rem\),\n\s*linear-gradient\(145deg, #070014 0%, #22064e 46%, #5a1497 76%, #12062c 100%\);\n\s*\}\n\s*#home::before\{\n\s*content:''; position:absolute; inset:0; z-index:0;\n\s*background:\n\s*radial-gradient\(circle at center, rgba\(255,255,255,\.08\), transparent 32%\),\n\s*linear-gradient\(180deg, rgba\(4,0,16,\.12\), rgba\(4,0,16,\.34\)\);\n\s*\}\n\s*#home::after\{\n\s*content:''; position:absolute; inset:0; z-index:2; pointer-events:none;\n\s*background:\n\s*radial-gradient\(circle at 17% 26%, rgba\(255,255,255,\.78\) 0 1px, transparent 1\.5px\),\n\s*radial-gradient\(circle at 42% 18%, rgba\(255,255,255,\.58\) 0 1px, transparent 1\.5px\),\n\s*radial-gradient\(circle at 77% 34%, rgba\(255,255,255,\.68\) 0 1px, transparent 1\.5px\),\n\s*radial-gradient\(circle at 65% 68%, rgba\(255,255,255,\.52\) 0 1px, transparent 1\.5px\),\n\s*radial-gradient\(circle at 29% 76%, rgba\(255,255,255,\.62\) 0 1px, transparent 1\.5px\);\n\s*opacity:\.55;\n\s*filter: drop-shadow\(0 0 8px rgba\(217,91,255,\.8\)\);\n\s*\}",
+              "#home{\n      position:relative; min-height:72vh; padding-top:120px;\n      display:flex; align-items:center; justify-content:center; text-align:center; color:#fff; overflow:hidden;\n      scroll-margin-top:120px;\n      background:\n        radial-gradient(ellipse at 28% 31%, rgba(180,90,255,.36), transparent 19rem),\n        radial-gradient(ellipse at 76% 22%, rgba(72,128,255,.26), transparent 23rem),\n        radial-gradient(ellipse at 58% 82%, rgba(32,218,255,.14), transparent 22rem),\n        linear-gradient(118deg, rgba(255,255,255,.08) 0 8%, transparent 22% 100%),\n        linear-gradient(145deg, #02040d 0%, #11143d 38%, #39206f 68%, #070716 100%);\n    }\n    #home::before{\n      content:''; position:absolute; inset:0; z-index:0;\n      background:\n        radial-gradient(ellipse at 30% 36%, rgba(255,223,184,.14), transparent 18%),\n        radial-gradient(ellipse at 64% 58%, rgba(159,195,255,.12), transparent 26%),\n        linear-gradient(180deg, rgba(1,2,10,.08), rgba(1,2,10,.42));\n    }\n    #home::after{\n      content:''; position:absolute; inset:0; z-index:2; pointer-events:none;\n      background:\n        radial-gradient(circle at 17% 26%, rgba(255,244,216,.82) 0 1px, transparent 1.4px),\n        radial-gradient(circle at 42% 18%, rgba(196,218,255,.62) 0 1px, transparent 1.4px),\n        radial-gradient(circle at 77% 34%, rgba(255,255,255,.72) 0 1px, transparent 1.4px),\n        radial-gradient(circle at 65% 68%, rgba(181,204,255,.56) 0 1px, transparent 1.4px),\n        radial-gradient(circle at 29% 76%, rgba(255,231,190,.64) 0 1px, transparent 1.4px);\n      opacity:.48;\n      filter: drop-shadow(0 0 6px rgba(145,160,255,.72));\n    }",
+              'hero background')
+
+          sub(r"position:absolute; top:20px; right:20px; width:170px; max-width:40vw; aspect-ratio:1/1; object-fit:cover;",
+              "position:absolute; top:46px; right:20px; width:170px; max-width:40vw; aspect-ratio:1/1; object-fit:cover;",
+              'portrait position')
+
+          sub(r"const cfg = \{\r?\n\s*star: \{ density: 0\.00005, min: 30, max: 60, twinkle: 0\.004 \},\r?\n\s*meteor: \{ baseRate: 0\.18, speedMin: 6, speedVar: 6, lenMin: 100, lenVar: 150, angle: Math\.PI/4 \},\r?\n\s*trail: \{ life: 620 \},\r?\n\s*burst: \{ count: 55, speed: \[2\.2, 7\.5\], life: \[600, 1400\] \}\r?\n\s*\};",
+              "const cfg = {\n        star: { density: 0.00009, min: 70, max: 140, twinkle: 0.0035 },\n        meteor: { baseRate: 0.18, speedMin: 6, speedVar: 6, lenMin: 100, lenVar: 150, angle: Math.PI/4 },\n        trail: { life: 620 },\n        burst: { count: 55, speed: [2.2, 7.5], life: [600, 1400] }\n      };",
+              'star config')
+
+          sub(r"/\* ===== Stars ===== \*/\r?\n\s*function resetStars\(\)\{.*?\r?\n\s*\}\r?\n\s*function drawStarGlow",
+              "/* ===== Stars ===== */\n      function randomStarTone(){\n        const t = Math.random();\n        if(t < 0.48) return { hue: 38 + Math.random()*20, light: 78 + Math.random()*10, sat: 62 };\n        if(t < 0.78) return { hue: 208 + Math.random()*28, light: 80 + Math.random()*10, sat: 78 };\n        if(t < 0.93) return { hue: 262 + Math.random()*24, light: 78 + Math.random()*9, sat: 70 };\n        return { hue: 6 + Math.random()*18, light: 72 + Math.random()*8, sat: 58 };\n      }\n      function resetStars(){\n        stars.length = 0;\n        const area = starCanvas.clientWidth * starCanvas.clientHeight;\n        const baseCount = Math.floor(area * cfg.star.density);\n        const count = Math.max(cfg.star.min, Math.min(cfg.star.max, baseCount));\n        const cx = starCanvas.clientWidth/2, cy = starCanvas.clientHeight/2;\n        for(let i=0;i<count;i++){\n          const z = 0.6 + Math.random()*1.8;\n          const tier = Math.random();\n          let r = (tier<0.8 ? (Math.random()*0.9 + 0.2) : (tier<0.95 ? (Math.random()*1.4 + 0.6) : (Math.random()*1.8 + 1.0))) / z;\n\n          const x = Math.random()*starCanvas.clientWidth;\n          const y = Math.random()*starCanvas.clientHeight;\n          const dx = x - cx, dy = y - cy;\n          const radial = Math.hypot(dx,dy) / Math.max(cx,cy);\n          const band = Math.abs((dy - dx*0.18) / Math.max(starCanvas.clientHeight, 1));\n          const galaxyBias = Math.max(0, 1 - band*4.2);\n          const distAtten = 0.45 + 0.4*Math.max(0,1 - radial) + 0.28*galaxyBias;\n          const tone = randomStarTone();\n\n          stars.push({\n            x, y, r,\n            alpha: Math.random()*0.8+0.2,\n            tw: (Math.random()*0.010 + cfg.star.twinkle)*(Math.random()<.5?-1:1),\n            hue: tone.hue,\n            hueShift: (Math.random()*0.08 + 0.02)*(Math.random()<.5?-1:1),\n            light: tone.light,\n            sat: tone.sat,\n            tier, z, distAtten\n          });\n        }\n      }\n      function drawStarGlow",
+              'star generator')
+
+          sub(r"if\(s\.hue<180 \|\| s\.hue>265\) s\.hueShift\*=-1;",
+              "if(s.hue<0 || s.hue>290) s.hueShift*=-1;",
+              'hue bounds', flags=0)
+          sub(r"sctx\.fillStyle = `hsla\(\$\{s\.hue\}, 80%, \$\{72 \+ Math\.sin\(s\.hue\*0\.05\)\*10\}%, \$\{0\.9\*s\.alpha\}\)`;",
+              "sctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, ${s.light + Math.sin(s.hue*0.05)*4}%, ${0.9*s.alpha})`;",
+              'star fill', flags=0)
+
+          sub(r"function drawRipple\(x,y,r,alpha\)\{.*?\r?\n\s*\}\r?\n\s*function drawBH",
+              "function drawRipple(x,y,r,alpha){\n        const g = bctx.createRadialGradient(x,y, r*0.7, x,y,r);\n        g.addColorStop(0, `rgba(180,210,255,${alpha*0.22})`);\n        g.addColorStop(0.45, `rgba(213,122,255,${alpha*0.18})`);\n        g.addColorStop(1, `rgba(180,210,255,0)`);\n        bctx.fillStyle = g;\n        bctx.beginPath(); bctx.arc(x,y,r,0,Math.PI*2); bctx.fill();\n      }\n      function drawBH",
+              'ripple')
+
+          sub(r"bctx\.translate\(BH\.x, BH\.y\);.*?bctx\.fillStyle = BH\.eht \? 'rgba\(255,220,140,0\.95\)' : 'rgba\(220,250,255,0\.95\)';",
+              "bctx.translate(BH.x, BH.y);\n\n        const lens = bctx.createRadialGradient(0,0,R*0.45, 0,0,R*1.55);\n        lens.addColorStop(0, 'rgba(0,0,0,0)');\n        lens.addColorStop(0.46, 'rgba(88,120,255,0.08)');\n        lens.addColorStop(0.72, 'rgba(211,92,255,0.16)');\n        lens.addColorStop(1, 'rgba(30,210,255,0)');\n        bctx.fillStyle = lens;\n        bctx.beginPath(); bctx.arc(0,0,R*1.55,0,Math.PI*2); bctx.fill();\n\n        const shadow = bctx.createRadialGradient(0,0,0, 0,0,R*1.02);\n        shadow.addColorStop(0, 'rgba(0,0,0,0.98)');\n        shadow.addColorStop(0.58, 'rgba(0,0,0,0.94)');\n        shadow.addColorStop(1, 'rgba(0,0,0,0)');\n        bctx.fillStyle = shadow;\n        bctx.beginPath(); bctx.arc(0,0,R*1.02,0,Math.PI*2); bctx.fill();\n\n        bctx.lineWidth = 2.2;\n        bctx.strokeStyle = BH.eht ? 'rgba(255,188,86,0.82)' : 'rgba(184,216,255,0.88)';\n        bctx.beginPath(); bctx.arc(0,0,R*1.05,0,Math.PI*2); bctx.stroke();\n\n        const rot = (now*0.0005 + scrollSpeedEMA*0.00005) % (Math.PI*2);\n        bctx.rotate(rot);\n        const grd = bctx.createLinearGradient(-R*2,0,R*2,0);\n        if(BH.eht){\n          grd.addColorStop(0, 'rgba(60,50,255,0.0)');\n          grd.addColorStop(0.22, 'rgba(147,78,255,0.26)');\n          grd.addColorStop(0.43, 'rgba(255,156,64,0.5)');\n          grd.addColorStop(0.58, 'rgba(255,231,137,0.78)');\n          grd.addColorStop(0.78, 'rgba(212,68,255,0.24)');\n          grd.addColorStop(1, 'rgba(70,180,255,0.0)');\n        }else{\n          grd.addColorStop(0, 'rgba(80,160,255,0.0)');\n          grd.addColorStop(0.32, 'rgba(102,184,255,0.32)');\n          grd.addColorStop(0.55, 'rgba(213,238,255,0.72)');\n          grd.addColorStop(0.82, 'rgba(159,86,255,0.26)');\n        }\n        bctx.fillStyle = grd;\n        bctx.beginPath();\n        bctx.ellipse(0,0, R*1.8, R*0.6, 0, 0, Math.PI*2);\n        bctx.fill();\n\n        bctx.globalAlpha = 0.42;\n        bctx.strokeStyle = BH.eht ? 'rgba(175,120,255,0.62)' : 'rgba(170,225,255,0.58)';\n        bctx.lineWidth = 1.4;\n        bctx.beginPath();\n        bctx.ellipse(0,0, R*2.05, R*0.72, 0.03, 0, Math.PI*2);\n        bctx.stroke();\n\n        bctx.globalAlpha = 0.9;\n        bctx.fillStyle = BH.eht ? 'rgba(255,220,140,0.95)' : 'rgba(220,250,255,0.95)';",
+              'black hole')
+
+          sub(r"const sections = document\.querySelectorAll\('section'\);\r?\n\s*const observer = new IntersectionObserver\(\(entries\)=>\{.*?\r?\n\s*sections\.forEach\(s=>\{\r?\n\s*s\.style\.opacity='0'; s\.style\.transform='translateY\(18px\)'; s\.style\.transition='all \.55s ease';\r?\n\s*observer\.observe\(s\);\r?\n\s*\}\);",
+              "const sections = document.querySelectorAll('section');\n      const observer = new IntersectionObserver((entries)=>{\n        entries.forEach(entry=>{\n          if(entry.isIntersecting){\n            entry.target.style.opacity='1';\n            entry.target.style.transform='translateY(0)';\n            observer.unobserve(entry.target);\n          }\n        });\n      }, {rootMargin:'0px 0px 28% 0px', threshold:.01});\n      sections.forEach(s=>{\n        s.style.opacity='0'; s.style.transform='translateY(10px)'; s.style.transition='opacity .24s ease, transform .24s ease';\n        observer.observe(s);\n      });",
+              'section reveal')
+
+          p.write_text(text, encoding='utf-8', newline='')
+          PY
+      - name: Commit homepage patch and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/tune-cosmic-background.yml
+          git add index.html
+          git commit -m "Tune cosmic background and reveal timing"
+          git push
