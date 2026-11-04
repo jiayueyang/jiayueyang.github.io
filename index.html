@@ -571,95 +571,159 @@
         bctx.fillStyle = g;
         bctx.beginPath(); bctx.arc(x,y,r,0,Math.PI*2); bctx.fill();
       }
+      /*
+       * Kerr-inspired visual illustration, not numerical Kerr ray tracing.
+       * Reference: NASA's accretion-disk simulation https://svs.gsfc.nasa.gov/13326/
+       * Lensing, the dark shadow, beaming, and differential plasma rotation
+       * are represented schematically, with spin-directed tracer paths.
+       */
       function drawBH(now){
-        if(!BH.active) return;
-        const age = now - BH.born;
-        if(age > BH.life){ killBH(); return; }
-
-        const pad = 8;
+        if(!BH.active)return;
+        const age=now-BH.born;
+        if(age>BH.life){killBH();return;}
+        const R=BH.r,TAU=Math.PI*2;
+        const w=bhCanvas.clientWidth,h=bhCanvas.clientHeight,pad=18;
         if(BH.prevRect){
-          const r = BH.prevRect; bctx.clearRect(r.x, r.y, r.w, r.h);
+          const old=BH.prevRect;
+          bctx.clearRect(old.x,old.y,old.w,old.h);
         }
-
-        const R = BH.r;
-        const rect = { x: Math.max(0, BH.x - R*2.2 - pad), y: Math.max(0, BH.y - R*1.6 - pad),
-                       w: Math.min(bhCanvas.clientWidth, R*4.4 + pad*2), h: Math.min(bhCanvas.clientHeight, R*3.2 + pad*2) };
-        BH.prevRect = rect;
-
+        const x0=Math.max(0,BH.x-2.85*R-pad),y0=Math.max(0,BH.y-2.02*R-pad);
+        const x1=Math.min(w,BH.x+2.85*R+pad),y1=Math.min(h,BH.y+2.02*R+pad);
+        BH.prevRect={x:x0,y:y0,w:x1-x0,h:y1-y0};
+        const fade=Math.min(1,age/550,(BH.life-age)/1000);
+        if(fade<=0)return;
+        const spin=BH.spin||1,phase=age*.00072*spin;
         bctx.save();
-        bctx.beginPath(); bctx.rect(rect.x, rect.y, rect.w, rect.h); bctx.clip();
+        bctx.beginPath();bctx.rect(x0,y0,x1-x0,y1-y0);bctx.clip();
+        bctx.translate(BH.x,BH.y);
+        bctx.globalAlpha=fade;
 
-        if(age < 700){
-          const t = age/700;
-          drawRipple(BH.x, BH.y, R*(0.8+0.6*t), 0.35*(1-t));
+        // Glowing gas extends beyond the photon ring. No flat elliptical fill.
+        const halo=bctx.createRadialGradient(0,0,.65*R,0,0,2.6*R);
+        halo.addColorStop(0,'rgba(255,134,52,0.06)');
+        halo.addColorStop(.34,'rgba(240,103,39,0.10)');
+        halo.addColorStop(.72,'rgba(215,78,29,0.028)');
+        halo.addColorStop(1,'rgba(215,78,29,0)');
+        bctx.fillStyle=halo;
+        bctx.beginPath();bctx.arc(0,0,2.6*R,0,TAU);bctx.fill();
+
+        // Inclined accretion disk. Left-facing plasma approaches the observer
+        // and is Doppler-brighter than the receding right-facing material.
+        function diskHalf(front){
+          const bands=isMobile?8:13,steps=isMobile?48:84;
+          bctx.save();bctx.globalCompositeOperation='screen';bctx.lineCap='round';
+          for(let k=0;k<bands;k++){
+            const f=k/(bands-1),radius=R*(.93+1.33*f);
+            const eddy=phase/Math.pow(radius/R,1.5);
+            bctx.lineWidth=R*(.095-.027*f);
+            for(let j=0;j<steps;j++){
+              const a=(front?0:Math.PI)+Math.PI*j/steps;
+              const b=(front?0:Math.PI)+Math.PI*(j+1)/steps;
+              const mid=(a+b)*.5,boost=(1-Math.cos(mid))*.5;
+              const r1=radius+R*.013*(1-f)*Math.sin(13*a+2*k-9*eddy);
+              const r2=radius+R*.013*(1-f)*Math.sin(13*b+2*k-9*eddy);
+              const xa=r1*Math.cos(a),ya=r1*.31*Math.sin(a);
+              const xb=r2*Math.cos(b),yb=r2*.31*Math.sin(b);
+              if(Math.hypot((xa+xb)*.5,(ya+yb)*.5)<R*.81)continue;
+              const grain=.81+.19*Math.sin(15*mid+k*2.7-6*eddy);
+              const alpha=(.075+.22*boost)*(.72+.28*(1-f))*grain;
+              const hue=16+24*(1-f);
+              const light=29+19*(1-f)+30*boost;
+              bctx.strokeStyle='hsla('+hue+',96%,'+light+'%,'+alpha+')';
+              bctx.beginPath();bctx.moveTo(xa,ya);bctx.lineTo(xb,yb);bctx.stroke();
+            }
+          }
+          bctx.restore();
         }
+        diskHalf(false);
 
-        bctx.translate(BH.x, BH.y);
-
-        const lens = bctx.createRadialGradient(0,0,R*0.45, 0,0,R*1.55);
-        lens.addColorStop(0, 'rgba(0,0,0,0)');
-        lens.addColorStop(0.46, 'rgba(88,120,255,0.08)');
-        lens.addColorStop(0.72, 'rgba(211,92,255,0.16)');
-        lens.addColorStop(1, 'rgba(30,210,255,0)');
-        bctx.fillStyle = lens;
-        bctx.beginPath(); bctx.arc(0,0,R*1.55,0,Math.PI*2); bctx.fill();
-
-        const shadow = bctx.createRadialGradient(0,0,0, 0,0,R*1.02);
-        shadow.addColorStop(0, 'rgba(0,0,0,0.98)');
-        shadow.addColorStop(0.58, 'rgba(0,0,0,0.94)');
-        shadow.addColorStop(1, 'rgba(0,0,0,0)');
-        bctx.fillStyle = shadow;
-        bctx.beginPath(); bctx.arc(0,0,R*1.02,0,Math.PI*2); bctx.fill();
-
-        bctx.lineWidth = 2.2;
-        bctx.strokeStyle = BH.eht ? 'rgba(255,188,86,0.82)' : 'rgba(184,216,255,0.88)';
-        bctx.beginPath(); bctx.arc(0,0,R*1.05,0,Math.PI*2); bctx.stroke();
-
-        const rot = (now*0.0005 + scrollSpeedEMA*0.00005) % (Math.PI*2);
-        bctx.rotate(rot);
-        const grd = bctx.createLinearGradient(-R*2,0,R*2,0);
-        if(BH.eht){
-          grd.addColorStop(0, 'rgba(60,50,255,0.0)');
-          grd.addColorStop(0.22, 'rgba(147,78,255,0.26)');
-          grd.addColorStop(0.43, 'rgba(255,156,64,0.5)');
-          grd.addColorStop(0.58, 'rgba(255,231,137,0.78)');
-          grd.addColorStop(0.78, 'rgba(212,68,255,0.24)');
-          grd.addColorStop(1, 'rgba(70,180,255,0.0)');
-        }else{
-          grd.addColorStop(0, 'rgba(80,160,255,0.0)');
-          grd.addColorStop(0.32, 'rgba(102,184,255,0.32)');
-          grd.addColorStop(0.55, 'rgba(213,238,255,0.72)');
-          grd.addColorStop(0.82, 'rgba(159,86,255,0.26)');
+        // Gravitationally lensed images of the disk's hidden far side:
+        // a bright upper arch and a fainter underside below the silhouette.
+        function bentArc(upper){
+          const count=upper?8:4,steps=isMobile?46:70;
+          bctx.save();bctx.globalCompositeOperation='screen';bctx.lineCap='round';
+          for(let i=0;i<count;i++){
+            const t=i/(count-1);
+            const width=(upper?1.43:1.16)+(t-.5)*.19;
+            const rise=(upper?1.19:1.00)+(t-.5)*.15;
+            bctx.beginPath();
+            for(let j=0;j<=steps;j++){
+              const a=Math.PI*j/steps;
+              const x=R*width*Math.cos(a);
+              const y=(upper?-1:1)*R*(rise*Math.sin(a)+.045);
+              if(j===0)bctx.moveTo(x,y);else bctx.lineTo(x,y);
+            }
+            bctx.strokeStyle='rgba(255,'+Math.round(117+80*t)+','+
+              Math.round(51+38*t)+','+(upper?.078:.038)+')';
+            bctx.lineWidth=R*(upper?.050:.027);
+            bctx.stroke();
+          }
+          bctx.restore();
         }
-        bctx.fillStyle = grd;
-        bctx.beginPath();
-        bctx.ellipse(0,0, R*1.8, R*0.6, 0, 0, Math.PI*2);
-        bctx.fill();
+        bentArc(true);bentArc(false);
 
-        bctx.globalAlpha = 0.42;
-        bctx.strokeStyle = BH.eht ? 'rgba(175,120,255,0.62)' : 'rgba(170,225,255,0.58)';
-        bctx.lineWidth = 1.4;
-        bctx.beginPath();
-        bctx.ellipse(0,0, R*2.05, R*0.72, 0.03, 0, Math.PI*2);
-        bctx.stroke();
+        // A sharply dark central silhouette, rather than a gold-filled oval.
+        const shade=bctx.createRadialGradient(0,0,R*.14,0,0,R*.92);
+        shade.addColorStop(0,'rgba(1,2,6,1)');
+        shade.addColorStop(.76,'rgba(1,2,6,1)');
+        shade.addColorStop(.94,'rgba(1,2,6,.98)');
+        shade.addColorStop(1,'rgba(1,2,6,0)');
+        bctx.fillStyle=shade;
+        bctx.beginPath();bctx.arc(0,0,R*.92,0,TAU);bctx.fill();
+        diskHalf(true);
 
-        bctx.globalAlpha = 0.9;
-        bctx.fillStyle = BH.eht ? 'rgba(255,220,140,0.95)' : 'rgba(220,250,255,0.95)';
-        bctx.beginPath();
-        bctx.ellipse(R*0.6, 0, R*0.7, R*0.16, 0, -0.3, 0.3);
-        bctx.fill();
+        // Thin photon ring, asymmetric like the EHT-inspired bright crescent.
+        bctx.save();bctx.globalCompositeOperation='screen';bctx.lineCap='round';
+        const ringSteps=isMobile?72:116;
+        for(let i=0;i<ringSteps;i++){
+          const a=TAU*i/ringSteps,b=TAU*(i+1)/ringSteps+.008;
+          const approaching=(1-Math.cos((a+b)*.5))*.5;
+          bctx.strokeStyle='rgba(255,'+Math.round(132+103*approaching)+','+
+            Math.round(62+84*approaching)+','+(.12+.56*approaching)+')';
+          bctx.lineWidth=R*(.014+.020*approaching);
+          bctx.beginPath();bctx.arc(0,0,R*.82,a,b);bctx.stroke();
+        }
+        bctx.restore();
 
-        bctx.globalAlpha = 1.0;
-        BH.hsAng += 0.02;
-        const hsA = BH.hsAng;
-        const a = R*1.6, b = R*0.5;
-        const hx = a*Math.cos(hsA), hy = b*Math.sin(hsA);
-        const hs = bctx.createRadialGradient(hx,hy,0, hx,hy, R*0.18);
-        hs.addColorStop(0, BH.eht?'rgba(255,230,150,1)':'rgba(220,250,255,1)');
-        hs.addColorStop(1, 'rgba(255,255,255,0)');
-        bctx.fillStyle = hs;
-        bctx.beginPath(); bctx.arc(hx,hy,R*0.12,0,Math.PI*2); bctx.fill();
+        // Moving turbulent plasma knots. Inner orbits run faster than outer
+        // orbits; their short tangential trails make spin visually apparent.
+        bctx.save();bctx.globalCompositeOperation='screen';bctx.lineCap='round';
+        for(let i=0;i<(isMobile?34:68);i++){
+          const radius=R*(.99+(i%17)/16*1.26);
+          const a=i*2.39996323+phase/Math.pow(radius/R,1.5);
+          const x=radius*Math.cos(a),y=radius*.31*Math.sin(a);
+          if(Math.hypot(x,y)<R*.82)continue;
+          const approach=(1-Math.cos(a))*.5;
+          const intensity=.15+.77*approach;
+          bctx.lineWidth=(i%9===0?2.0:1.15)*(isMobile?.8:1);
+          bctx.strokeStyle='rgba(255,'+Math.round(146+90*approach)+','+
+            Math.round(66+79*approach)+','+(.14+.50*intensity)+')';
+          bctx.beginPath();
+          bctx.moveTo(radius*Math.cos(a-.105*spin),radius*.31*Math.sin(a-.105*spin));
+          bctx.lineTo(x,y);bctx.stroke();
+          if(i%7===0){
+            bctx.fillStyle='rgba(255,221,155,'+(.18+.46*intensity)+')';
+            bctx.beginPath();bctx.arc(x,y,R*.013,0,TAU);bctx.fill();
+          }
+        }
+        bctx.restore();
 
+        // Schematic frame dragging: tracer streams acquire stronger angular
+        // deflection nearer the spinning horizon (falloff roughly as r^-2).
+        bctx.save();bctx.globalCompositeOperation='screen';
+        for(let stream=0;stream<5;stream++){
+          bctx.beginPath();
+          for(let j=0;j<=48;j++){
+            const rr=R*(1.03+1.44*j/48);
+            const a=stream*TAU/5+spin*(1.55/Math.pow(rr/R,2)+age*.00010);
+            const x=rr*Math.cos(a),y=rr*.37*Math.sin(a);
+            if(j===0)bctx.moveTo(x,y);else bctx.lineTo(x,y);
+          }
+          bctx.lineWidth=isMobile?.9:1.1;
+          bctx.strokeStyle='rgba(255,177,102,'+(.09+.012*stream)+')';
+          bctx.stroke();
+        }
+        bctx.restore();
         bctx.restore();
       }
 
