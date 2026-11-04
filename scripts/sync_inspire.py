@@ -139,7 +139,7 @@ def refresh() -> None:
     modified, cards = re.subn(
         r'<div class="publication">.*?</div>', rewrite_card, modified, flags=re.DOTALL
     )
-    if cards != 24 or matched < 14:
+    if cards != 26 or matched < 16:
         raise ValueError(f"Unexpected publication matching: cards={cards}, matched={matched}")
     if modified != html:
         PAGE.write_bytes(modified.encode("utf-8"))
