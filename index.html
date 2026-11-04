@@ -120,6 +120,16 @@
     .award:hover{transform:scale(1.015)}
     .research-item{background: linear-gradient(135deg, #a8e6cf, #88d8a3); padding:18px; margin:16px 0; border-left:5px solid #00b894}
     .research-item:hover{transform: translateY(-3px); box-shadow:0 10px 26px rgba(0,184,148,.22)}
+    .news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;margin:14px 0 22px}
+    .news-card{background:linear-gradient(140deg,#faf9ff,#eeebff);border:1px solid #e5defe;border-left:4px solid var(--accent-a);border-radius:12px;padding:14px}
+    .news-card h4{margin:4px 0 8px;color:#302c50;line-height:1.45}
+    .news-card p{margin:7px 0}
+    .news-meta{color:#5c527c;font-size:.86rem;font-weight:600}
+    .news-card a,.award a{color:#5436ac;text-decoration:underline;text-underline-offset:2px}
+    .news-card a:focus-visible,.award a:focus-visible{outline:3px solid var(--accent-a);outline-offset:3px}
+    .metric-asof{font-size:.82rem;color:#625a73;font-weight:400}
+    @media (max-width:768px){.news-list{grid-template-columns:1fr}}
+
 
     .stats-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:18px; margin:22px 0}
     .stat-card{background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color:#fff; padding:24px; text-align:center}
@@ -829,7 +839,7 @@
     </div>
     <div class="content en">
       <h1>Welcome to My Homepage</h1>
-      <p>PhD student in Applied Math @ University of Waterloo • Quantum Information & Gravity Researcher</p>
+      <p>PhD Candidate in Applied Mathematics @ University of Waterloo • Quantum Information & Gravity Researcher</p>
       <p>Exploring the mysteries of the universe, sharing the beauty of science 🌟</p>
       <a href="#about" class="button">Learn More</a>
       <a href="https://scholar.google.ca/citations?user=ahiEMnYAAAAJ&hl=en&oi=sra" class="button" target="_blank">Google Scholar</a>
@@ -955,7 +965,7 @@
   <section id="about" class="container">
     <div class="zh hidden">
       <h2>关于我 | About Me</h2>
-      <p>我是<strong>杨佳悦</strong>，目前在加拿大滑铁卢大学攻读应用数学博士学位，同时也是周界理论物理研究所(Perimeter Institute)和量子计算研究所(Institute for Quantum Computing)的研究生。我的研究领域主要集中在量子信息与量子引力的交叉领域。</p>
+      <p>我是<strong>杨佳悦</strong>，目前是加拿大滑铁卢大学应用数学博士候选人，同时也是周界理论物理研究所(Perimeter Institute)和量子计算研究所(Institute for Quantum Computing)的研究生。我的研究领域主要集中在量子信息与量子引力的交叉领域。</p>
       <h3>🎓 教育背景</h3>
       <ul>
         <li><strong>博士生</strong> (2024年9月-2028年8月) - 加拿大滑铁卢大学，应用数学，全额奖学金50,800加元×4年，平均成绩96.33/100</li>
@@ -988,10 +998,23 @@
       </ul>
       <h3>🌟 科研亮点</h3>
       <p>我的研究兴趣广泛，涵盖黑洞热力学、全息量子信息、相对论量子信息、虫洞解与模拟黑洞等方向。</p>
+      <div class="news-block"><h3>📰 新闻与报道 | News</h3>
+      <h4>2026 年官方获奖新闻</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">2026年10月29日 · Institute for Quantum Computing</p><h4><a href="https://uwaterloo.ca/institute-for-quantum-computing/news/nine-iqc-doctoral-students-receive-scholarship-recognizing" target="_blank" rel="noopener noreferrer">Nine IQC doctoral students receive scholarship recognizing research excellence</a></h4><p>IQC 公布九名获奖博士生，其中包括应用数学系的杨佳悦。</p></article>
+<article class="news-card"><p class="news-meta">2026年10月23日 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/five-applied-mathematics-graduate-students-receive-120000" target="_blank" rel="noopener noreferrer">Five Applied Mathematics graduate students receive $120,000 as part of the federal government’s CRTAS program</a></h4><p>包含个人照片、导师 Robert B. Mann 和黑洞量子信息研究介绍。</p></article>
+<article class="news-card"><p class="news-meta">2026年10月23日 · University of Waterloo · Mathematics</p><h4><a href="https://uwaterloo.ca/math/news/multiple-graduate-students-receive-120000-part-federal" target="_blank" rel="noopener noreferrer">Multiple graduate students receive $120,000 as part of the federal government’s CRTAS program</a></h4><p>数学学院官方获奖名单，正确列出姓名 Jiayue Yang。</p></article>
+</div>
+      <h4>加拿大政府官方获奖记录</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">2026年政府记录 · Government of Canada · NSERC</p><h4><a href="https://search.open.canada.ca/grants/record/nserc-crsng%2C110_2026_2027_Q1_571%2Ccurrent" target="_blank" rel="noopener noreferrer">Canada Graduate Research Scholarship – Doctoral (CGRS-D)</a></h4><p>政府资助数据库登记获奖人为 Yang, Jiayue。该记录不属于新闻报道。</p></article>
+</div>
+      <h4>2025 年获奖报道</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">2025年9月29日 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/2025-applied-mathematics-and-computational-mathematics" target="_blank" rel="noopener noreferrer">2025 Applied Mathematics and Computational Mathematics Awards and Recognitions</a></h4><p>报道获得 Best Research Paper Award。</p></article>
+<article class="news-card"><p class="news-meta">2025年2月4日 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/applied-math-holds-first-graduate-mini-conference" target="_blank" rel="noopener noreferrer">Applied Math holds first graduate mini-conference</a></h4><p>报道获得研究生小型会议报告三等奖。</p></article>
+</div></div>
     </div>
     <div class="en">
       <h2>About Me | 关于我</h2>
-      <p>I am <strong>Jiayue Yang</strong>, a PhD student in Applied Mathematics at the University of Waterloo, Canada, and an Associate Graduate Student at both the Perimeter Institute for Theoretical Physics (PI) and the Institute for Quantum Computing (IQC). My research focuses on the intersection of quantum information and quantum gravity.</p>
+      <p>I am <strong>Jiayue Yang</strong>, a PhD candidate in Applied Mathematics at the University of Waterloo, Canada, and an Associate Graduate Student at both the Perimeter Institute for Theoretical Physics (PI) and the Institute for Quantum Computing (IQC). My research focuses on the intersection of quantum information and quantum gravity.</p>
       <h3>🎓 Education</h3>
       <ul>
         <li><strong>Ph.D. Student</strong> (Sep 2024 - Aug 2028) - University of Waterloo, Applied Math, Full Scholarship 50,800 CAD×4 years, Average Score 96.33/100</li>
@@ -1024,6 +1047,19 @@
       </ul>
       <h3>🌟 Research Highlights</h3>
       <p>My research covers a broad range of topics, including black hole thermodynamics, holographic quantum information, relativistic quantum information, wormhole solutions, and analogue black holes. </p>
+      <div class="news-block"><h3>📰 News & Media</h3>
+      <h4>2026 Institutional Award Announcements</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">October 29, 2026 · Institute for Quantum Computing</p><h4><a href="https://uwaterloo.ca/institute-for-quantum-computing/news/nine-iqc-doctoral-students-receive-scholarship-recognizing" target="_blank" rel="noopener noreferrer">Nine IQC doctoral students receive scholarship recognizing research excellence</a></h4><p>The IQC announcement names Jiayue Yang among nine CGRS-D recipients.</p></article>
+<article class="news-card"><p class="news-meta">October 23, 2026 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/five-applied-mathematics-graduate-students-receive-120000" target="_blank" rel="noopener noreferrer">Five Applied Mathematics graduate students receive $120,000 as part of the federal government’s CRTAS program</a></h4><p>Includes a portrait, supervisor Robert B. Mann, and research on quantum information and black holes.</p></article>
+<article class="news-card"><p class="news-meta">October 23, 2026 · University of Waterloo · Mathematics</p><h4><a href="https://uwaterloo.ca/math/news/multiple-graduate-students-receive-120000-part-federal" target="_blank" rel="noopener noreferrer">Multiple graduate students receive $120,000 as part of the federal government’s CRTAS program</a></h4><p>Official Faculty of Mathematics list correctly identifies Jiayue Yang.</p></article>
+</div>
+      <h4>Official Government Award Record</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">2026 government record · Government of Canada · NSERC</p><h4><a href="https://search.open.canada.ca/grants/record/nserc-crsng%2C110_2026_2027_Q1_571%2Ccurrent" target="_blank" rel="noopener noreferrer">Canada Graduate Research Scholarship – Doctoral (CGRS-D)</a></h4><p>Official federal grant record naming Yang, Jiayue. This is not a news article.</p></article>
+</div>
+      <h4>2025 Award News</h4><div class="news-list">
+<article class="news-card"><p class="news-meta">September 29, 2025 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/2025-applied-mathematics-and-computational-mathematics" target="_blank" rel="noopener noreferrer">2025 Applied Mathematics and Computational Mathematics Awards and Recognitions</a></h4><p>Recognizes Jiayue Yang for the Best Research Paper Award.</p></article>
+<article class="news-card"><p class="news-meta">February 4, 2025 · University of Waterloo · Applied Mathematics</p><h4><a href="https://uwaterloo.ca/applied-mathematics/news/applied-math-holds-first-graduate-mini-conference" target="_blank" rel="noopener noreferrer">Applied Math holds first graduate mini-conference</a></h4><p>Reports the third-place graduate mini-conference presentation prize.</p></article>
+</div></div>
     </div>
   </section>
 
@@ -1288,7 +1324,13 @@
       <h2>教学经历 | Teaching Experience</h2>
       <h3>🎓 大学教学助理经历</h3>
       <ul>
-        <li><strong>量子理论3</strong> (2025年1月-4月) - 滑铁卢大学应用数学系助教</li>
+        <li><strong>AMATH 350 微分方程</strong>（2026年1月至4月、2025年9月至12月）— 滑铁卢大学助教</li>
+        <li><strong>AMATH 250 微分方程</strong>（2026年1月至4月）— 滑铁卢大学助教</li>
+        <li><strong>AMATH 473 量子理论 2</strong>（2025年9月至12月）— 滑铁卢大学助教</li>
+        <li><strong>MATH 127 微积分</strong>（2025年5月至8月）— 滑铁卢大学助教</li>
+        <li><strong>SYDE 112 微积分</strong>（2025年5月至8月）— 滑铁卢大学助教</li>
+        <li><strong>AMATH 242 计算数学导论</strong>（2025年1月至4月）— 滑铁卢大学助教</li>
+        <li><strong>AMATH 474 量子理论 3</strong>（2025年1月至4月）— 滑铁卢大学助教</li>
         <li><strong>天文学导论</strong> (2023年5月-12月) - 滑铁卢大学SCI 238课程助教</li>
       </ul>
       <h3>📺 在线教学课程 (B站免费课程)</h3>
@@ -1300,6 +1342,10 @@
       </ul>
       <h3>🎤 学术报告与演讲 (近期)</h3>
       <ul>
+        <li><strong>相对论性量子信息与全息</strong> — Strings 2026（上海，2026年7月）</li>
+        <li><strong>相对论性量子信息与全息</strong> — QIQG 2026（清华大学，2026年6月至7月）</li>
+        <li><strong>Magic Harvesting: Probing Spacetime with Particle Detectors</strong> — 理论物理研究所（2026年6月23日）</li>
+        <li><strong>Probing Spacetime through Relativistic Quantum Information</strong> — 周界研究所（2026年4月27日）</li>
         <li><strong>从黑洞热力学到黑洞化学</strong> - 滑铁卢大学AMATH研究生小型会议 (2025年1月)</li>
         <li><strong>从黑洞热力学到黑洞化学</strong> - 南科大第二届研讨会 (2025年1月)</li>
         <li><strong>复杂度、标度和相变</strong> - 江西师范大学 (2024年12月)</li>
@@ -1307,7 +1353,7 @@
       </ul>
       <h3>📚 科普教育工作</h3>
       <ul>
-        <li><strong>B站科普视频</strong> - 超过76.5万播放量，1.28万粉丝关注</li>
+        <li><strong>B站科普视频</strong> - 超过87.5万播放量，1.4万粉丝关注</li>
         <li><strong>科学普及活动</strong> - 组织分发免费科普书籍给全国青少年</li>
       </ul>
     </div>
@@ -1315,7 +1361,13 @@
       <h2>Teaching Experience | 教学经历</h2>
       <h3>🎓 University Teaching Assistant</h3>
       <ul>
-        <li><strong>Quantum Theory 3</strong> (Jan-Apr 2025) - Dept. of Applied Math, University of Waterloo</li>
+        <li><strong>AMATH 350 Differential Equations</strong> (Jan–Apr 2026, Sep–Dec 2025) — University of Waterloo TA</li>
+        <li><strong>AMATH 250 Differential Equations</strong> (Jan–Apr 2026) — University of Waterloo TA</li>
+        <li><strong>AMATH 473 Quantum Theory 2</strong> (Sep–Dec 2025) — University of Waterloo TA</li>
+        <li><strong>MATH 127 Calculus</strong> (May–Aug 2025) — University of Waterloo TA</li>
+        <li><strong>SYDE 112 Calculus</strong> (May–Aug 2025) — University of Waterloo TA</li>
+        <li><strong>AMATH 242 Introduction to Computational Mathematics</strong> (Jan–Apr 2025) — University of Waterloo TA</li>
+        <li><strong>AMATH 474 Quantum Theory 3</strong> (Jan–Apr 2025) — University of Waterloo TA</li>
         <li><strong>Introductory Astronomy</strong> (May-Dec 2023) - SCI 238, University of Waterloo</li>
       </ul>
       <h3>📺 Online Teaching Courses (Free Bilibili Courses)</h3>
@@ -1327,6 +1379,10 @@
       </ul>
       <h3>🎤 Recent Academic Presentations</h3>
       <ul>
+        <li><strong>Relativistic Quantum Information Meets Holography</strong> — Strings 2026, Shanghai (July 2026)</li>
+        <li><strong>Relativistic Quantum Information Meets Holography</strong> — QIQG 2026, Tsinghua University (June–July 2026)</li>
+        <li><strong>Magic Harvesting: Probing Spacetime with Particle Detectors</strong> — Institute of Theoretical Physics (June 23, 2026)</li>
+        <li><strong>Probing Spacetime through Relativistic Quantum Information</strong> — Perimeter Institute (April 27, 2026)</li>
         <li><strong>From Black Hole Thermodynamics to Black Hole Chemistry</strong> - UWaterloo AMATH Graduate Mini-Conference (Jan 2025)</li>
         <li><strong>From Black Hole Thermodynamics to Black Hole Chemistry</strong> - SUSTech 2nd Workshop (Jan 2025)</li>
         <li><strong>Complexity, Scaling, and a Phase Transition</strong> - Jiangxi Normal University (Dec 2024)</li>
@@ -1334,7 +1390,7 @@
       </ul>
       <h3>📚 Science Outreach</h3>
       <ul>
-        <li><strong>Bilibili Science Videos</strong> - Over 765K views, 12.8K followers</li>
+        <li><strong>Bilibili Science Videos</strong> - Over 875K views, 14K followers</li>
         <li><strong>Science Popularization</strong> - Organizing free science book distribution nationwide</li>
       </ul>
     </div>
@@ -1344,12 +1400,20 @@
   <section id="awards" class="container">
     <div class="zh hidden">
       <h2>获奖荣誉 | Awards & Honors</h2>
-      <h3>🏆 最新获奖 (2024-2025)</h3>
-      <div class="award"><strong>Alan George学生领导力奖</strong> - 2500加元 (滑铁卢大学2025年唯一获得者)</div>
+      <h3>🏆 最新获奖 (2025–2026)</h3>
+      <div class="award"><strong>NSERC 加拿大博士研究奖学金（CGRS-D）</strong> — 120,000 加元（2026–2029，40,000 加元/年）。<a href="https://uwaterloo.ca/applied-mathematics/news/five-applied-mathematics-graduate-students-receive-120000" target="_blank" rel="noopener noreferrer">官方报道</a></div>
+      <div class="award"><strong>滑铁卢大学校长研究生奖学金</strong> — 5,000 加元（2026）</div>
+      <div class="award"><strong>David Johnston 国际交流奖（McCall MacBain）</strong> — 2,500 加元（2026）</div>
+      <div class="award"><strong>应用数学优秀助教奖</strong> — 200 加元（2025–2026）</div>
+      <div class="award"><strong>应用数学研究生优秀研究论文奖</strong> — 250 加元（2025–2026；亦获 2024–2025 年度奖项）。<a href="https://uwaterloo.ca/applied-mathematics/news/2025-applied-mathematics-and-computational-mathematics" target="_blank" rel="noopener noreferrer">2025 年报道</a></div>
+      <div class="award"><strong>应用数学研究生小型会议报告三等奖</strong>（2025 年 1 月）。<a href="https://uwaterloo.ca/applied-mathematics/news/applied-math-holds-first-graduate-mini-conference" target="_blank" rel="noopener noreferrer">官方报道</a></div>
+      <div class="award"><strong>J. Alan George 学生领导力奖</strong> - 2500加元 (滑铁卢大学2025年唯一获得者)</div>
       <div class="award"><strong>David Johnston国际学生入学奖学金</strong> - 5000加元 (2024-2025)</div>
       <div class="award"><strong>量子计算研究所入学奖</strong> - 5000加元 (2024)</div>
       <div class="award"><strong>教务长博士入学奖学金(女性)</strong> - 5000加元 (2024)</div>
       <h3>💰 奖学金类</h3>
+      <div class="award"><strong>国际博士生奖（IDSA）</strong> — 5,140 加元/学期（按 CV 记录）</div>
+      <div class="award"><strong>研究生科研传播奖</strong> — 500 加元（2024、2025）</div>
       <div class="award"><strong>Mitacs Globalink研究生奖学金</strong> - 15000加元 (2022-2023)</div>
       <div class="award"><strong>院长奖学金</strong> - 1600加元 (2022)</div>
       <div class="award"><strong>石溪大学优秀学生学费奖学金</strong> - 24740美元 (2020年，273人中排名第2)</div>
@@ -1370,12 +1434,20 @@
     </div>
     <div class="en">
       <h2>Awards & Honors | 获奖荣誉</h2>
-      <h3>🏆 Recent Awards (2024-2025)</h3>
-      <div class="award"><strong>Alan George Student Leadership Award</strong> - 2500 CAD (Only recipient at UWaterloo 2025)</div>
+      <h3>🏆 Recent Awards (2025–2026)</h3>
+      <div class="award"><strong>NSERC Canada Graduate Research Scholarship – Doctoral (CGRS-D)</strong> — CAD 120,000 (2026–2029; CAD 40,000/year). <a href="https://uwaterloo.ca/applied-mathematics/news/five-applied-mathematics-graduate-students-receive-120000" target="_blank" rel="noopener noreferrer">Official announcement</a></div>
+      <div class="award"><strong>University of Waterloo President’s Graduate Scholarship</strong> — CAD 5,000 (2026)</div>
+      <div class="award"><strong>David Johnston International Experience Award – McCall MacBain</strong> — CAD 2,500 (2026)</div>
+      <div class="award"><strong>Applied Mathematics Outstanding Teaching Assistant Award</strong> — CAD 200 (2025–2026)</div>
+      <div class="award"><strong>Applied Mathematics Graduate Research Paper Award</strong> — CAD 250 (2025–2026; also received in 2024–2025). <a href="https://uwaterloo.ca/applied-mathematics/news/2025-applied-mathematics-and-computational-mathematics" target="_blank" rel="noopener noreferrer">2025 announcement</a></div>
+      <div class="award"><strong>Third Prize, Applied Mathematics Graduate Mini-Conference</strong> (January 2025). <a href="https://uwaterloo.ca/applied-mathematics/news/applied-math-holds-first-graduate-mini-conference" target="_blank" rel="noopener noreferrer">Official announcement</a></div>
+      <div class="award"><strong>J. Alan George Student Leadership Award</strong> - 2500 CAD (Only recipient at UWaterloo 2025)</div>
       <div class="award"><strong>David Johnston International Student Entrance Scholarship</strong> - 5000 CAD (2024-2025)</div>
       <div class="award"><strong>Institute for Quantum Computing Entrance Award</strong> - 5000 CAD (2024)</div>
       <div class="award"><strong>Provost Doctoral Entrance Award for Women</strong> - 5000 CAD (2024)</div>
       <h3>💰 Scholarships</h3>
+      <div class="award"><strong>International Doctoral Student Award (IDSA)</strong> — CAD 5,140 per term (as listed in CV)</div>
+      <div class="award"><strong>Graduate Student Research Dissemination Award</strong> — CAD 500 (2024 and 2025)</div>
       <div class="award"><strong>Mitacs Globalink Graduate Fellowship</strong> - 15000 CAD (2022-2023)</div>
       <div class="award"><strong>Dean's Scholarship</strong> - 1600 CAD (2022)</div>
       <div class="award"><strong>Stony Brook University Tuition Scholarship</strong> - $24740 USD (2020, 2/273)</div>
@@ -1402,7 +1474,13 @@
     <div class="zh hidden">
       <h2>志愿与服务 | Service</h2>
       <ul>
-        <li>帮助青少年的志愿服务活动 (2020-至今) — 在B站开设免费物理课程，累计播放量765,000+，粉丝12,810+</li>
+        <li>Conestoga Mall 家庭 STEM 科普活动（2026年10月17日，2小时），通过互动实验向公众讲解物理</li>
+        <li>Waterloo LUMEN 科学节（2026年9月19日，5小时），为家庭演示物理实验</li>
+        <li>青少年学业与科学教育分享（2026年5月15日），介绍 STEM 学习与大学规划</li>
+        <li>中国天文知识竞赛东北赛区学术委员会（2026年4月10–20日，20小时）</li>
+        <li>Gravity, Particles, and Information（RBM70）会议本地组织者（2025年12月，20小时）</li>
+        <li>Waterloo LUMEN 科学节量子实验科普（2025年9月20日，2小时）</li>
+        <li>帮助青少年的志愿服务活动 (2020-至今) — 在B站开设免费物理课程，累计播放量875,000+，粉丝14,000+</li>
         <li>帮助青少年的志愿服务活动 (2020-至今) — 创建物理俱乐部网站，分享学习经验、课程与笔记</li>
         <li>帮助青少年的志愿服务活动 (2022-至今) — 建立“国际留学经验分享群”</li>
         <li>激励青少年的志愿服务活动 (2022-至今) — 采访世界各地著名科学家以启发学生</li>
@@ -1417,7 +1495,13 @@
     <div class="en">
       <h2>Service | 志愿与服务</h2>
       <ul>
-        <li>Volunteer Service Activities to Help Young Students (2020–Present) – Teaching free online courses on Bilibili with 765,000+ views and 12,810+ subscribers</li>
+        <li>Family STEM outreach at Conestoga Mall (Oct 17, 2026; 2 hours), hands-on public physics demonstrations</li>
+        <li>LUMEN Festival 2026 (Sep 19, 2026; 5 hours), interactive physics demonstrations for families</li>
+        <li>Youth education and academic mentorship (May 15, 2026), guidance on STEM learning and university goals</li>
+        <li>China Astronomy Knowledge Competition, Northeast Region (Apr 10–20, 2026; 20 hours), academic committee</li>
+        <li>Local organizer, Gravity, Particles, and Information (RBM70) (Dec 2025; 20 hours)</li>
+        <li>Quantum experiments outreach at LUMEN Festival (Sep 20, 2025; 2 hours)</li>
+        <li>Volunteer Service Activities to Help Young Students (2020–Present) – Teaching free online courses on Bilibili with 875,000+ views and 14,000+ subscribers</li>
         <li>Volunteer Service Activities to Help Young Students (2020–Present) – Set up a physics club website to share my learning experience, my courses, and notes</li>
         <li>Volunteer Service Activities to Help Young Students (2022–Present) – Establish the “International Study Experience Sharing Group”</li>
         <li>Volunteer Service Activities to Inspire Young Students (2022–Present) – Interview famous scientists worldwide to inspire young students</li>
@@ -1483,8 +1567,8 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2025 杨佳悦 | Jiayue Yang. All rights reserved.</p>
-      <p>滑铁卢大学 应用数学博士生 | PhD student in Applied Mathematics, University of Waterloo, PI, and IQC</p>
+      <p>&copy; 2026 杨佳悦 | Jiayue Yang. All rights reserved.</p>
+      <p>滑铁卢大学 应用数学博士候选人 | PhD candidate in Applied Mathematics, University of Waterloo, PI, and IQC</p>
       <p>⭐ "探索宇宙奥秘，传播科学之美" | "Exploring the mysteries of the universe, sharing the beauty of science" ⭐</p>
     </div>
   </footer>
