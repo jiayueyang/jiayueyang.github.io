@@ -245,6 +245,7 @@
 /* ===================== VISITS WIDGET: END (CSS) ===================== */
   </style>
 
+  <script src="assets/black-hole-raytracer.js"></script>
   <script>
     /* ---------- Language Toggle ---------- */
     function toggleLanguage(lang){
@@ -276,6 +277,7 @@
 
       const sctx = starCanvas.getContext('2d');
       const bctx = bhCanvas.getContext('2d');
+      let gpuTracer=null,gpuAttempted=false;
 
       let stars=[], meteors=[], particles=[];
       let lastRAF = performance.now(), lastScrollY = window.scrollY;
@@ -588,6 +590,48 @@
        * are represented schematically, with spin-directed tracer paths.
        */
       function drawBH(now){
+        { // Independent scope leaves the existing Canvas fallback intact.
+          if(!BH.active)return;
+          const age=now-BH.born;
+          if(age>BH.life){killBH();return;}
+          if(!gpuAttempted){
+            gpuAttempted=true;
+            try{
+              if(typeof window.createBlackHoleRaytracer==='function'){
+                gpuTracer=window.createBlackHoleRaytracer({mobile:isMobile});
+              }
+            }catch(err){
+              console.warn('GPU black-hole renderer unavailable; using Canvas fallback.',err);
+            }
+          }
+          if(gpuTracer){
+            const radius=BH.r,w=radius*5.6,h=radius*4.25;
+            const left=BH.x-w/2,top=BH.y-h/2;
+            const x0=Math.max(0,left-3),y0=Math.max(0,top-3);
+            const x1=Math.min(bhCanvas.clientWidth,left+w+3);
+            const y1=Math.min(bhCanvas.clientHeight,top+h+3);
+            if(BH.prevRect){
+              const old=BH.prevRect;
+              bctx.clearRect(old.x,old.y,old.w,old.h);
+            }
+            BH.prevRect={x:x0,y:y0,w:Math.max(0,x1-x0),h:Math.max(0,y1-y0)};
+            const opacity=Math.max(0,Math.min(1,age/550,(BH.life-age)/900));
+            let saved=false;
+            try{
+              const image=gpuTracer.render(age/1000,BH.spin);
+              bctx.save(); saved=true;
+              bctx.globalAlpha=opacity;
+              bctx.drawImage(image,left,top,w,h);
+              bctx.restore();
+              return;
+            }catch(err){
+              if(saved)bctx.restore();
+              gpuTracer=null;
+              console.warn('GPU draw failed; reverting to Canvas fallback.',err);
+            }
+          }
+        }
+        // WebGL disabled or unavailable: draw using the former Canvas code.
         if(!BH.active)return;
         const age=now-BH.born;
         if(age>BH.life){killBH();return;}
