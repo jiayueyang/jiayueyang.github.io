@@ -286,7 +286,7 @@
 
       // ---- Black hole state ----
       const BH = { active:false, x:0, y:0, r:90, born:0, life:16000, cool:4000, lastGone:-1e9, spin:1, prevRect:null };
-      const CLICK = { chanceBH:0.55, nearFactor:1.8 };
+      const CLICK = { chanceBH:1.0, nearFactor:1.8 }; // Clicking free sky reveals the black hole reliably.
 
       // 全局闪烁稳态：降速、距离衰减、缓启动
       let twinkleGlobal = 0; // 缓启动 [0,1]
