@@ -762,9 +762,64 @@
       if(!prefersReduced){ requestAnimationFrame(loop); }
     }
 
+
+    /* Refresh publication counts and citations from INSPIRE's official read-only API.
+       If the API is unreachable, the explicitly dated figures on the page are retained. */
+    async function refreshInspireMetrics(){
+      const base='https://inspirehep.net/api';
+      const today=new Date().toISOString().slice(0,10);
+      try{
+        const authorResponse=await fetch(base+'/authors/2679717',{headers:{Accept:'application/json'}});
+        if(!authorResponse.ok)return;
+        const author=await authorResponse.json();
+        const bai=(author.metadata?.ids||[]).find(id=>/INSPIRE BAI/i.test(id.schema||''))?.value||
+                  author.metadata?.bai;
+        if(!bai)return;
+        const fields='titles,dois,arxiv_eprints,citation_count,document_type';
+        const url=base+'/literature?size=250&page=1&fields='+encodeURIComponent(fields)+
+                  '&q='+encodeURIComponent('a '+bai);
+        const response=await fetch(url,{headers:{Accept:'application/json'}});
+        if(!response.ok)return;
+        const payload=await response.json();
+        const hits=payload.hits?.hits||[];
+        const raw=payload.hits?.total;
+        const total=typeof raw==='number'?raw:raw?.value;
+        if(!Number.isInteger(total)||total<10||hits.length!==total)return;
+        const citations=hits.reduce((sum,hit)=>sum+(Number(hit.metadata?.citation_count)||0),0);
+        document.querySelectorAll('[data-inspire-stat="records"]').forEach(el=>el.textContent=total);
+        document.querySelectorAll('[data-inspire-stat="citations"]').forEach(el=>el.textContent=citations);
+        document.querySelectorAll('[data-inspire-date]').forEach(el=>{
+          el.textContent=el.closest('.zh')?'（INSPIRE 更新于 '+today+'）':'(INSPIRE updated '+today+')';
+        });
+        const dois=new Map(),arxivs=new Map(),records=new Map();
+        hits.forEach(hit=>{
+          (hit.metadata?.dois||[]).forEach(d=>{if(d.value)dois.set(d.value.toLowerCase(),hit)});
+          (hit.metadata?.arxiv_eprints||[]).forEach(a=>{if(a.value)arxivs.set(a.value,hit)});
+          if(hit.id)records.set(String(hit.id),hit);
+        });
+        document.querySelectorAll('.publication').forEach(card=>{
+          const metric=card.querySelector('.pub-metrics');
+          if(!metric)return;
+          let found;
+          for(const link of card.querySelectorAll('a[href]')){
+            const href=link.getAttribute('href')||'';
+            if(href.includes('doi.org/'))found=dois.get(decodeURIComponent(href.split('doi.org/')[1]).toLowerCase());
+            else if(href.includes('arxiv.org/abs/'))found=arxivs.get(href.split('/abs/')[1].split('?')[0]);
+            else if(href.includes('inspirehep.net/literature/'))found=records.get(href.split('/literature/')[1].split('?')[0]);
+            if(found)break;
+          }
+          if(!found)return;
+          const value=Number(found.metadata?.citation_count)||0;
+          metric.textContent=card.closest('.zh')?'INSPIRE 引用: '+value+' · 更新于 '+today:
+            'INSPIRE citations: '+value+' · Updated '+today;
+        });
+      }catch(error){/* Use the dated baseline rather than showing unverified numbers. */}
+    }
+
     /* ---------------- Page Init ---------------- */
     document.addEventListener('DOMContentLoaded', ()=>{
       toggleLanguage('en'); // 默认英文
+      refreshInspireMetrics();
 
       window.addEventListener('scroll', ()=>{
         const hd = document.querySelector('header');
