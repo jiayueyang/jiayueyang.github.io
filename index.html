@@ -283,8 +283,8 @@
       let paused = false, storm = false, tick=0;
 
       // ---- Black hole state ----
-      const BH = { active:false, x:0, y:0, r:90, born:0, life:12000, cool:8000, lastGone: -1e9, eht:true, rippleT:0, hsAng:0, prevRect:null };
-      const CLICK = { chanceBH:0.30, nearFactor:1.5 };
+      const BH = { active:false, x:0, y:0, r:90, born:0, life:16000, cool:4000, lastGone:-1e9, spin:1, prevRect:null };
+      const CLICK = { chanceBH:0.55, nearFactor:1.8 };
 
       // 全局闪烁稳态：降速、距离衰减、缓启动
       let twinkleGlobal = 0; // 缓启动 [0,1]
@@ -483,7 +483,11 @@
             const dx = BH.x - p.x, dy = BH.y - p.y;
             const dist = Math.hypot(dx,dy);
             const g = (dist>40) ? 0.12 * (BH.r / Math.max(dist*1.6, 80)) : 0.0;
-            p.vx += dx/dist * g; p.vy += dy/dist * g;
+            if(dist>1){
+              const frameTwist=BH.spin*.20*Math.min(2.5,Math.pow(BH.r/dist,2));
+              p.vx+=dx/dist*g-dy/dist*frameTwist;
+              p.vy+=dy/dist*g+dx/dist*frameTwist;
+            }
           }
 
           const tw = 1 + (Math.sin((age*0.02 + i)%6.28)*0.12);
@@ -544,7 +548,11 @@
           if(BH.active) return false;
           if(now - BH.lastGone < BH.cool) return false;
         }
-        BH.active = true; BH.x = x; BH.y = y; BH.born = now; BH.rippleT = 0; BH.hsAng = 0; BH.prevRect = null;
+        BH.active = true;
+        BH.r=Math.max(44,Math.min(90,bhCanvas.clientWidth*.17,bhCanvas.clientHeight*.30));
+        BH.x=Math.max(BH.r*1.70,Math.min(x,bhCanvas.clientWidth-BH.r*1.70));
+        BH.y=Math.max(BH.r*1.40,Math.min(y,bhCanvas.clientHeight-BH.r*1.40));
+        BH.born=now;BH.prevRect=null;
         return true;
       }
       function killBH(){
@@ -619,7 +627,7 @@
             for(let j=0;j<steps;j++){
               const a=(front?0:Math.PI)+Math.PI*j/steps;
               const b=(front?0:Math.PI)+Math.PI*(j+1)/steps;
-              const mid=(a+b)*.5,boost=(1-Math.cos(mid))*.5;
+              const mid=(a+b)*.5,boost=(1-spin*Math.cos(mid))*.5;
               const r1=radius+R*.013*(1-f)*Math.sin(13*a+2*k-9*eddy);
               const r2=radius+R*.013*(1-f)*Math.sin(13*b+2*k-9*eddy);
               const xa=r1*Math.cos(a),ya=r1*.31*Math.sin(a);
@@ -677,7 +685,7 @@
         const ringSteps=isMobile?72:116;
         for(let i=0;i<ringSteps;i++){
           const a=TAU*i/ringSteps,b=TAU*(i+1)/ringSteps+.008;
-          const approaching=(1-Math.cos((a+b)*.5))*.5;
+          const approaching=(1-spin*Math.cos((a+b)*.5))*.5;
           bctx.strokeStyle='rgba(255,'+Math.round(132+103*approaching)+','+
             Math.round(62+84*approaching)+','+(.12+.56*approaching)+')';
           bctx.lineWidth=R*(.014+.020*approaching);
@@ -693,7 +701,7 @@
           const a=i*2.39996323+phase/Math.pow(radius/R,1.5);
           const x=radius*Math.cos(a),y=radius*.31*Math.sin(a);
           if(Math.hypot(x,y)<R*.82)continue;
-          const approach=(1-Math.cos(a))*.5;
+          const approach=(1-spin*Math.cos(a))*.5;
           const intensity=.15+.77*approach;
           bctx.lineWidth=(i%9===0?2.0:1.15)*(isMobile?.8:1);
           bctx.strokeStyle='rgba(255,'+Math.round(146+90*approach)+','+
@@ -753,7 +761,7 @@
         if(!p.spiral || !BH.active) return;
         const t = (now - p.born)/p.life;
         const r = p.r0 * (1 - 0.9*t);
-        const ang = p.ang0 + 10*t;
+        const ang = p.ang0 + BH.spin*(7*t+4*t*t);
         p.x = BH.x + r*Math.cos(ang);
         p.y = BH.y + r*Math.sin(ang);
         if(t>0.88 && Math.random()<0.25 && particles.length<MAX_PARTICLES){
@@ -804,7 +812,7 @@
       }
       function onClick(e){
         const {rect, inside} = inHomeRect(e.clientX, e.clientY);
-        if(!inside) return;
+        if(!inside || (e.target.closest && e.target.closest('a, button'))) return;
         const x = e.clientX - rect.left, y = e.clientY - rect.top;
 
         if(BH.active){
@@ -830,7 +838,7 @@
             const home = document.getElementById('home').getBoundingClientRect();
             spawnBH(home.width*0.5, home.height*0.48, true);
           }
-        }else if(k==='e'){ BH.eht = !BH.eht; }
+        }else if(k==='e'){ BH.spin *= -1; }
       }
 
       window.addEventListener('resize', resizeAll);
