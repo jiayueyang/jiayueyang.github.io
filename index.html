@@ -371,41 +371,43 @@
         ctx.restore();
       }
       function drawStars(){
-        const w = starCanvas.clientWidth, h = starCanvas.clientHeight;
-        const twinkleBoost = 1;
-        const reduce = (BH.active?0.2:1.0);
-
-        for(const s of stars){
-          if(Math.random()>reduce) continue;
-
-          // 轻量透镜（近区偏折）
+        const w=starCanvas.clientWidth,h=starCanvas.clientHeight;
+        for(const star of stars){
+          let x=star.x,y=star.y,amplify=1;
           if(BH.active){
-            const dx = (s.x - BH.x), dy = (s.y - BH.y);
-            const d2 = dx*dx + dy*dy;
-            const rad2 = (BH.r*BH.r)*2.5;
-            if(d2 < rad2*8){
-              const f = 0.00018 * (rad2 / Math.max(d2, 100));
-              s.x += dx * f; s.y += dy * f;
+            // Stylized Kerr lensing and spin-dependent light deflection.
+            // Do not mutate source-star positions: the bend is optical.
+            const dx=x-BH.x,dy=y-BH.y,impact=Math.hypot(dx,dy);
+            if(impact<BH.r*.75)continue;
+            if(impact<BH.r*3.2){
+              const inv=BH.r/Math.max(impact,BH.r*.75);
+              const radial=1+.11*inv*inv;
+              const twist=BH.spin*.33*inv*inv*inv;
+              const c=Math.cos(twist),sn=Math.sin(twist);
+              x=BH.x+radial*(dx*c-dy*sn);
+              y=BH.y+radial*(dx*sn+dy*c);
+              amplify=1+.17*inv;
             }
           }
-
-          // 全局降速 + 深度与距离衰减 + 缓启动
-          const baseTw = s.tw * twinkleBoost * (0.65) * (1/s.z) * s.distAtten * twinkleGlobal;
-          s.alpha += baseTw;
-          if(s.alpha>1){s.tw*=-1; s.alpha=1}
-          if(s.alpha<0){s.tw*=-1; s.alpha=0; s.x=Math.random()*w; s.y=Math.random()*h}
-          s.hue += s.hueShift;
-          if(s.hue<0 || s.hue>290) s.hueShift*=-1;
-
-          if(s.tier>0.95){
-            drawStarGlow(s.x, s.y, s.r*1.6, s.hue, s.alpha);
-            drawStarSpikes(sctx, s.x, s.y, s.r*2.4, s.hue, 0.55*s.alpha, (tick%360)/180*Math.PI);
-          }else if(s.tier>0.8){
-            drawStarGlow(s.x, s.y, s.r*1.2, s.hue, 0.8*s.alpha);
+          const baseTw=star.tw*.65*(1/star.z)*star.distAtten*twinkleGlobal;
+          star.alpha+=baseTw;
+          if(star.alpha>1){star.tw*=-1;star.alpha=1;}
+          if(star.alpha<0){
+            star.tw*=-1;star.alpha=0;
+            star.x=Math.random()*w;star.y=Math.random()*h;
           }
-
-          sctx.fillStyle = `hsla(${s.hue}, ${s.sat}%, ${s.light + Math.sin(s.hue*0.05)*4}%, ${0.9*s.alpha})`;
-          sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, Math.PI*2); sctx.fill();
+          star.hue+=star.hueShift;
+          if(star.hue<0||star.hue>290)star.hueShift*=-1;
+          const a=Math.min(1,star.alpha*amplify);
+          if(star.tier>.95){
+            drawStarGlow(x,y,star.r*1.6,star.hue,a);
+            drawStarSpikes(sctx,x,y,star.r*2.4,star.hue,.55*a,(tick%360)/180*Math.PI);
+          }else if(star.tier>.8){
+            drawStarGlow(x,y,star.r*1.2,star.hue,.8*a);
+          }
+          sctx.fillStyle='hsla('+star.hue+','+star.sat+'%,'+
+            (star.light+Math.sin(star.hue*.05)*4)+'%,'+(.9*a)+')';
+          sctx.beginPath();sctx.arc(x,y,star.r,0,Math.PI*2);sctx.fill();
         }
       }
 
