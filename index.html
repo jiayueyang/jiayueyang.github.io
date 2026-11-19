@@ -134,6 +134,37 @@
     @media (max-width:768px){.news-list{grid-template-columns:1fr}}
 
 
+
+    /* Unified conference photo gallery beneath About Me introductions */
+    .about-photo-gallery{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin:22px 0 30px;
+    }
+    .about-photo-gallery a{
+      display:block;
+      overflow:hidden;
+      border-radius:14px;
+      background:#efebfa;
+      box-shadow:0 7px 22px rgba(55,34,103,.16);
+    }
+    .about-photo-gallery img{
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:3/2;
+      object-fit:cover;
+      transition:transform .35s ease;
+    }
+    .about-photo-gallery a:hover img{transform:scale(1.035)}
+    @media (max-width:600px){
+      .about-photo-gallery{grid-template-columns:1fr;gap:12px}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .about-photo-gallery img{transition:none}
+    }
+
     .stats-grid{display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:18px; margin:22px 0}
     /* Warm ivory tiles, while keeping the existing clear lilac site accents. */
     .stat-card{
@@ -1156,6 +1187,20 @@
     <div class="zh hidden">
       <h2>关于我 | About Me</h2>
       <p>我是<strong>杨佳悦</strong>，目前是加拿大滑铁卢大学应用数学博士候选人，同时也是周界理论物理研究所(Perimeter Institute)和量子计算研究所(Institute for Quantum Computing)的研究生。我的研究领域主要集中在量子信息与量子引力的交叉领域。</p>
+      <div class="about-photo-gallery" aria-label="Research and conference photos">
+        <a href="assets/strings-2026-talk.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 1">
+          <img src="assets/strings-2026-talk.webp" alt="Academic presentation at Strings 2026 in Shanghai" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/university-talk.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 2">
+          <img src="assets/university-talk.webp" alt="Quantum information research talk in a university lecture hall" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/conference-discussion.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 3">
+          <img src="assets/conference-discussion.webp" alt="Researchers discussing physics at a scientific conference" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/research-conversation.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 4">
+          <img src="assets/research-conversation.webp" alt="Informal conversation with researchers during a conference" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+      </div>
       <h3>🎓 教育背景</h3>
       <ul>
         <li><strong>博士生</strong> (2024年9月-2028年8月) - 加拿大滑铁卢大学，应用数学，全额奖学金50,800加元×4年，平均成绩96.33/100</li>
@@ -1205,6 +1250,20 @@
     <div class="en">
       <h2>About Me | 关于我</h2>
       <p>I am <strong>Jiayue Yang</strong>, a PhD candidate in Applied Mathematics at the University of Waterloo, Canada, and an Associate Graduate Student at both the Perimeter Institute for Theoretical Physics (PI) and the Institute for Quantum Computing (IQC). My research focuses on the intersection of quantum information and quantum gravity.</p>
+      <div class="about-photo-gallery" aria-label="Research and conference photos">
+        <a href="assets/strings-2026-talk.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 1">
+          <img src="assets/strings-2026-talk.webp" alt="Academic presentation at Strings 2026 in Shanghai" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/university-talk.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 2">
+          <img src="assets/university-talk.webp" alt="Quantum information research talk in a university lecture hall" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/conference-discussion.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 3">
+          <img src="assets/conference-discussion.webp" alt="Researchers discussing physics at a scientific conference" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+        <a href="assets/research-conversation.webp" target="_blank" rel="noopener noreferrer" aria-label="View full-size conference photo 4">
+          <img src="assets/research-conversation.webp" alt="Informal conversation with researchers during a conference" width="1200" height="800" loading="lazy" decoding="async">
+        </a>
+      </div>
       <h3>🎓 Education</h3>
       <ul>
         <li><strong>Ph.D. Student</strong> (Sep 2024 - Aug 2028) - University of Waterloo, Applied Math, Full Scholarship 50,800 CAD×4 years, Average Score 96.33/100</li>
