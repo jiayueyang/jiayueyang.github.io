@@ -1,0 +1,2 @@
+# The Realtime narration transport uses the synchronous WebSocket client.
+websockets>=15,<17

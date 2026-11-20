@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\title{The Hawking temperature of a black hole}
+\author{PaperTranslate}
+\date{}
+\begin{document}
+\maketitle
+How does a distant observer assign a temperature to a black hole? For a Schwarzschild black hole, the surface gravity fixes the temperature at infinity, and gravitational redshift fixes the temperature measured by a static observer in thermal equilibrium.
+
+\section{The horizon and its surface gravity}
+Consider an uncharged, nonrotating black hole of mass M in four spacetime dimensions. Set the speed of light, the reduced Planck constant, and the Boltzmann constant to one, and retain Newton’s constant G.
+
+Choose the Schwarzschild time coordinate to agree with proper time at infinity. The metric function vanishes at the horizon radius.
+
+\begin{equation}
+f(r)=1-\frac{2GM}{r},\qquad r_{\mathrm{h}}=2GM\label{eq:metric}
+\end{equation}
+
+For this metric, half the radial derivative of the metric function at the horizon gives the surface gravity.
+
+\begin{equation}
+\kappa=\frac{1}{2}f'(r_{\mathrm{h}})=\frac{GM}{r_{\mathrm{h}}^{2}}=\frac{1}{4GM}\label{eq:kappa}
+\end{equation}
+
+\section{Temperature at infinity}
+Hawking’s field calculation fixes the temperature that enters the thermal occupation factor for outgoing quanta at infinity \cite{hawking1975}. Scattering by the exterior geometry also contributes a frequency dependent transmission factor to the observed flux.
+
+\begin{equation}
+T_{\mathrm{H}}=\frac{\kappa}{2\pi}=\frac{1}{8\pi GM}\label{eq:temperature}
+\end{equation}
+
+At fixed G, doubling the mass halves the Hawking temperature.
+
+\section{Temperature at a finite radius}
+Now consider a static thermal equilibrium state outside the horizon \cite{tolman1930}. The temperature assigned by an observer at rest depends on the rate of that observer’s proper clock relative to the clock at infinity.
+
+\begin{equation}
+T_{\mathrm{loc}}(r)\sqrt{f(r)}=T_{\mathrm{H}},\qquad r>r_{\mathrm{h}}\label{eq:redshift}
+\end{equation}
+
+Closer to the horizon, a static clock ticks more slowly and the corresponding equilibrium temperature rises. The static worldline ceases to exist at the horizon, and this equilibrium formula does not describe the full detector response during evaporation.
+
+\begin{thebibliography}{9}
+\bibitem{hawking1975} S. W. Hawking, Particle creation by black holes, Communications in Mathematical Physics 43, 199–220 (1975), Sec. 2. DOI 10.1007/BF02345020.
+
+\bibitem{tolman1930} R. C. Tolman and P. Ehrenfest, Temperature Equilibrium in a Static Gravitational Field, Physical Review 36, 1791–1798 (1930), abstract. DOI 10.1103/PhysRev.36.1791.
+
+\end{thebibliography}
+\end{document}
