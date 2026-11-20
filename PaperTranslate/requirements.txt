@@ -1,6 +1,0 @@
--r requirements-ingest.txt
--r requirements-export.txt
--r requirements-ai.txt
-fastapi>=0.121,<1
-uvicorn>=0.35,<1
-python-multipart>=0.0.27,<1
